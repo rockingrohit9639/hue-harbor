@@ -11,7 +11,7 @@ type Props = LinkProps & {
 
 export default function NavLink({ href, icon, label }: Props) {
   const pathname = usePathname()
-  const isActive = pathname.startsWith(href as string)
+  const isActive = pathname === href
 
   return (
     <Link

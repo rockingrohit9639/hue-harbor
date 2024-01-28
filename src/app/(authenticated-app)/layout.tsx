@@ -10,7 +10,7 @@ export default function AuthenticatedAppLayout({ children }: { children: React.R
   const { status } = useSession({
     required: true,
     onUnauthenticated: () => {
-      router.replace('/auth/signin')
+      router.replace('/auth/login')
     },
   })
 

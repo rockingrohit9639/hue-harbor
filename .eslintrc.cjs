@@ -1,36 +1,60 @@
-/** @type {import("eslint").Linter.Config} */
+/** @type {import('eslint').Linter.Config} */
 const config = {
+  env: {
+    browser: true,
+    node: true,
+  },
+  globals: {},
+  extends: [
+    "plugin:react/recommended",
+    "standard",
+    "plugin:react-hooks/recommended",
+    "plugin:import/typescript",
+    "plugin:@next/next/recommended",
+  ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: true,
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 2020,
+    sourceType: "module",
   },
-  plugins: ["@typescript-eslint"],
-  extends: [
-    "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked",
-  ],
+  plugins: ["react", "@typescript-eslint", "import"],
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
+    react: {
+      version: "16.14.0",
+    },
+  },
   rules: {
-    // These opinionated rules are enabled in stylistic-type-checked above.
-    // Feel free to reconfigure them to your own preference.
-    "@typescript-eslint/array-type": "off",
-    "@typescript-eslint/consistent-type-definitions": "off",
-
-    "@typescript-eslint/consistent-type-imports": [
-      "warn",
-      {
-        prefer: "type-imports",
-        fixStyle: "inline-type-imports",
-      },
-    ],
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "@typescript-eslint/require-await": "off",
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      {
-        checksVoidReturn: { attributes: false },
-      },
-    ],
+    "no-undef": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-use-before-define": "off",
+    camelcase: "off",
+    "comma-dangle": "off",
+    "func-call-spacing": "off",
+    "import/no-absolute-path": "off",
+    "import/order": ["error", { groups: ["builtin", "external", "internal"] }],
+    "import/un-resolved": "off",
+    indent: "off",
+    "multiline-ternary": "off",
+    "no-console": "warn",
+    "no-unused-expressions": "off",
+    "no-unused-vars": "off",
+    "no-use-before-define": "off",
+    "no-useless-constructor": "off",
+    "no-useless-escape": "off",
+    "prefer-regex-literals": "off",
+    "react/no-unknown-property": "error",
+    "react/prop-types": "off",
+    "react/self-closing-comp": ["error", { component: true, html: true }],
+    "react/react-in-jsx-scope": "off",
+    "space-before-function-paren": "off",
   },
 };
 

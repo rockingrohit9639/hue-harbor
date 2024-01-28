@@ -1,14 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { EditIcon, TrashIcon } from 'lucide-react'
+import { EditIcon } from 'lucide-react'
 import { match } from 'ts-pattern'
 import Container from '~/components/ui/container'
 import CreateWebsiteDialog from './_components/create-website-dialog'
 import { cn } from '~/lib/utils'
-import { Button, buttonVariants } from '~/components/ui/button'
+import { buttonVariants } from '~/components/ui/button'
 import { api } from '~/trpc/react'
 import ErrorMessage from '~/components/ui/error-message'
+import DeleteWebsiteDialog from './_components/delete-website-dialog'
 
 export default function Websites() {
   const websitesQuery = api.websites.findAll.useQuery()
@@ -66,7 +67,7 @@ export default function Websites() {
                   <EditIcon className="h-4 w-4" />
                 </Link>
 
-                <Button icon={<TrashIcon />} variant="destructive-outline" />
+                <DeleteWebsiteDialog id={website.id} />
               </div>
             </div>
           ))}

@@ -3,6 +3,8 @@
 import { PlusIcon, SendIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
+import { useState } from 'react'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -24,6 +26,8 @@ type CreateWebsiteDialogProps = {
 }
 
 export default function CreateWebsiteDialog({ className, style }: CreateWebsiteDialogProps) {
+  const [open, setOpen] = useState(false)
+
   const form = useForm<CreateWebsiteInput>({
     resolver: zodResolver(createWebsiteInput),
     defaultValues: {
@@ -33,14 +37,23 @@ export default function CreateWebsiteDialog({ className, style }: CreateWebsiteD
     },
   })
 
-  const createWebsiteMutation = api.websites.create.useMutation()
+  const createWebsiteMutation = api.websites.create.useMutation({
+    onSuccess: () => {
+      form.reset()
+      setOpen(false)
+      toast.success('Website created successfully!')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
 
   function handleCreateWebsite(values: CreateWebsiteInput) {
     createWebsiteMutation.mutate(values)
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button icon={<PlusIcon />}>Add new website</Button>
       </DialogTrigger>

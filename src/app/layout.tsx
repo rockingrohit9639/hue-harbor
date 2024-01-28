@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 
 import { TRPCReactProvider } from '~/trpc/react'
 import Providers from '~/components/providers'
+import { Toaster } from '~/components/ui/sonner'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -20,7 +21,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider>
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+            <Toaster />
+          </Providers>
         </TRPCReactProvider>
       </body>
     </html>

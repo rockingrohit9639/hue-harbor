@@ -37,8 +37,11 @@ export default function CreateWebsiteDialog({ className, style }: CreateWebsiteD
     },
   })
 
+  const utils = api.useUtils()
+
   const createWebsiteMutation = api.websites.create.useMutation({
     onSuccess: () => {
+      utils.websites.findAll.invalidate()
       form.reset()
       setOpen(false)
       toast.success('Website created successfully!')

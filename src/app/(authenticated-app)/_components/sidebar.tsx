@@ -26,7 +26,7 @@ export const ROUTES = [
   },
   {
     path: '/websites',
-    label: 'Websites',
+    label: 'My Websites',
     icon: <GlobeIcon />,
   },
 ]
@@ -49,7 +49,7 @@ export function Sidebar({ className, ...restProps }: SidebarProps) {
             <h1 className="text-center text-xl font-bold">Hue Harbor</h1>
           </Link>
 
-          <div className="space-y-1 py-2">
+          <div className="space-y-2 py-2">
             {ROUTES.map((route) => (
               <NavLink key={route.path} href={route.path} label={route.label} icon={route.icon} />
             ))}

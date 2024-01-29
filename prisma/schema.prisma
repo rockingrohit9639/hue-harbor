@@ -61,8 +61,10 @@ model Website {
     description String?
     url         String
 
-    createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
-    createdById String @db.ObjectId
+    createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    createdById String   @db.ObjectId
+    palette     Palette? @relation(fields: [paletteId], references: [id])
+    paletteId   String?  @db.ObjectId
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -86,8 +88,9 @@ model Palette {
     // PRIVATE -> A palette is private to a user and he/she can use it in their own websites only
     visibility PaletteVisibility @default(PRIVATE)
 
-    createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
-    createdById String @db.ObjectId
+    createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    createdById String    @db.ObjectId
+    websites    Website[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

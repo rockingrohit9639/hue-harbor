@@ -7,7 +7,7 @@ export async function findAllWebsites(prisma: PrismaClient, session: Session) {
   return prisma.website.findMany({ where: { createdById: session.user.id } })
 }
 
-export async function findWebsiteById(id: string, prisma: PrismaClient, userId: string) {
+export async function findWebsiteById(id: string, prisma: PrismaClient, session: Session) {
   const website = await prisma.website.findFirst({ where: { id } })
 
   if (!website) {
@@ -17,7 +17,7 @@ export async function findWebsiteById(id: string, prisma: PrismaClient, userId: 
     })
   }
 
-  if (website.createdById !== userId) {
+  if (website.createdById !== session.user.id) {
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'You are not allowed to access this website!',
@@ -32,7 +32,7 @@ export async function createWebsite(input: CreateWebsiteInput, prisma: PrismaCli
 }
 
 export async function updateWebsite(input: UpdateWebsiteInput, prisma: PrismaClient, session: Session) {
-  const website = await findWebsiteById(input.id, prisma, session.user.id)
+  const website = await findWebsiteById(input.id, prisma, session)
 
   return prisma.website.update({
     where: { id: website.id },
@@ -41,7 +41,7 @@ export async function updateWebsite(input: UpdateWebsiteInput, prisma: PrismaCli
 }
 
 export async function deleteWebsite(id: string, prisma: PrismaClient, session: Session) {
-  const website = await findWebsiteById(id, prisma, session.user.id)
+  const website = await findWebsiteById(id, prisma, session)
 
   return prisma.website.delete({
     where: { id: website.id },

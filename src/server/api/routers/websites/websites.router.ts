@@ -5,7 +5,7 @@ import { createWebsite, deleteWebsite, findAllWebsites, findWebsiteById, updateW
 
 export const websitesRouter = createTRPCRouter({
   findAll: protectedProcedure.query(({ ctx }) => findAllWebsites(ctx.db, ctx.session)),
-  findById: protectedProcedure.input(z.string()).query(({ input, ctx }) => findWebsiteById(input, ctx.db)),
+  findById: protectedProcedure.input(z.string()).query(({ input, ctx }) => findWebsiteById(input, ctx.db, ctx.session)),
   create: protectedProcedure
     .input(createWebsiteInput)
     .mutation(({ input, ctx }) => createWebsite(input, ctx.db, ctx.session)),

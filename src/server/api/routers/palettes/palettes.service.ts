@@ -2,14 +2,25 @@ import { PaletteVisibility, PrismaClient } from '@prisma/client'
 import { Session } from 'next-auth'
 import { TRPCError } from '@trpc/server'
 import { CreatePaletteInput, UpdatePaletteInput } from './palettes.input'
+import slugify from '~/lib/slugify'
 
 export async function createPalette(input: CreatePaletteInput, prisma: PrismaClient, session: Session) {
+  const existingPalette = await prisma.palette.findFirst({ where: { name: input.name.trim() } })
+  if (existingPalette) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Palette with this name already exists, please try a different name!',
+    })
+  }
+
   return prisma.palette.create({
     data: {
       name: input.name,
       visibility: input.visibility,
       createdBy: { connect: { id: session.user.id } },
       variables: [],
+      backgroundColor: input.backgroundColor,
+      slug: slugify(input.name),
     },
   })
 }

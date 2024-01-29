@@ -6,6 +6,7 @@ export const createPaletteInput = z.object({
     .min(4, 'Please enter at least 4 characters!')
     .max(100, 'Please enter at most 100 characters!'),
   visibility: z.enum(['PUBLIC', 'PRIVATE']).default('PRIVATE').optional(),
+  backgroundColor: z.string().optional(),
 })
 
 export type CreatePaletteInput = z.infer<typeof createPaletteInput>

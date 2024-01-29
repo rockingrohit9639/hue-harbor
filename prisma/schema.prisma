@@ -43,6 +43,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     websites      Website[]
+    Palette       Palette[]
 }
 
 model VerificationToken {
@@ -54,12 +55,36 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// Define the Website model to represent user-created websites
 model Website {
     id          String  @id @default(auto()) @map("_id") @db.ObjectId
     name        String
     description String?
     url         String
+
+    createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    createdById String @db.ObjectId
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum PaletteVisibility {
+    PUBLIC
+    PRIVATE
+}
+
+model Palette {
+    id   String @id @default(auto()) @map("_id") @db.ObjectId
+    name String
+
+    // There can be two types of variables,
+    // 1. Color -> as the name suggest
+    // 2. Number -> can be used for borderRadius or fontSize
+    variables Json
+
+    // PUBLIC -> These palettes can be shared in the community and other can also use them in their projects
+    // PRIVATE -> A palette is private to a user and he/she can use it in their own websites only
+    visibility PaletteVisibility @default(PRIVATE)
 
     createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
     createdById String @db.ObjectId

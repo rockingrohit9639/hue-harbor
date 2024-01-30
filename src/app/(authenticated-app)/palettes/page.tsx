@@ -6,6 +6,7 @@ import Container from '~/components/ui/container'
 import ErrorMessage from '~/components/ui/error-message'
 import Loader from '~/components/ui/loader'
 import { api } from '~/trpc/react'
+import CreatePaletteDialog from './_components/create-palette-dialog'
 
 export default function MyPalettes() {
   const palettesQuery = api.palettes.findAll.useQuery()
@@ -29,7 +30,9 @@ export default function MyPalettes() {
           effortlessly, ensuring consistent and stylish designs.
         </p>
 
-        <div className="mb-4 flex items-center justify-end">{/* <CreateWebsiteDialog /> */}</div>
+        <div className="mb-4 flex items-center justify-end">
+          <CreatePaletteDialog />
+        </div>
 
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {palettes.map((palette) => (

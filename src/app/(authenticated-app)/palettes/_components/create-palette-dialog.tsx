@@ -19,6 +19,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
+import SlugInput from '~/components/ui/slug-input'
 import { CreatePaletteInput, createPaletteInput } from '~/server/api/routers/palettes/palettes.input'
 import { api } from '~/trpc/react'
 
@@ -100,6 +101,24 @@ export default function CreatePaletteDialog({ className, style }: CreatePaletteD
                   <FormLabel>BG Color (optional)</FormLabel>
                   <FormControl>
                     <ColorPicker {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Slug</FormLabel>
+                  <FormControl>
+                    <SlugInput
+                      watcherField="name"
+                      placeholder="Please enter a slug to identify your palette"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

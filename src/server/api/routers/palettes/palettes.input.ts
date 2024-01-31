@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { SLUG_REGEX } from '~/lib/constants'
 
 export const createPaletteInput = z.object({
   name: z
@@ -7,11 +8,13 @@ export const createPaletteInput = z.object({
     .max(100, 'Please enter at most 100 characters!'),
   visibility: z.enum(['PUBLIC', 'PRIVATE']).default('PRIVATE').optional(),
   backgroundColor: z.string().optional(),
+  slug: z.string().regex(SLUG_REGEX, 'Please enter a valid slug!'),
 })
 
 export type CreatePaletteInput = z.infer<typeof createPaletteInput>
 
 export const updatePaletteInput = createPaletteInput
+  .omit({ slug: true })
   .partial()
   .extend({
     id: z.string(),

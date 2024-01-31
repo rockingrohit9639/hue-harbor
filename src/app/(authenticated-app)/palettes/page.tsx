@@ -38,7 +38,7 @@ export default function MyPalettes() {
           {palettes.map((palette) => (
             <Link
               key={palette.id}
-              className="space-y-2 rounded-md border bg-card p-4"
+              className="space-y-2 rounded-md bg-card p-4"
               style={{ backgroundColor: palette.backgroundColor ? palette.backgroundColor : undefined }}
               href={`/palettes/${palette.slug}`}
             >

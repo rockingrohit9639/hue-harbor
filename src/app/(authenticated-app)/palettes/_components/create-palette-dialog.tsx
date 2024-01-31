@@ -5,6 +5,7 @@ import { PlusIcon, SendIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import ColorPicker from '~/components/color-picker'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -98,7 +99,7 @@ export default function CreatePaletteDialog({ className, style }: CreatePaletteD
                 <FormItem>
                   <FormLabel>BG Color (optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="Background color" {...field} />
+                    <ColorPicker {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

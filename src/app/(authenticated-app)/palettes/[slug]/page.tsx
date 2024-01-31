@@ -19,6 +19,7 @@ import ColorPicker from '~/components/color-picker'
 import { variableSchema } from '~/schema/palette'
 import AddVariableDialog from '../_components/add-variable-dialog'
 import Builder from '../_components/builder'
+import VariableProperties from '../_components/variable-properties'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -158,13 +159,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
             <AddVariableDialog triggerProps={{ className: 'w-full', disabled: !isUpdateAllowed }} />
           </div>
 
-          {!isUpdateAllowed && (
-            <div className="flex flex-1 items-center justify-center p-4">
-              <p className="text-center text-sm text-muted-foreground">
-                Click on Update Palette to start editing your palette.
-              </p>
-            </div>
-          )}
+          <VariableProperties />
         </div>
       </div>
     ))

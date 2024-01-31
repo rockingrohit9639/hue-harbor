@@ -17,6 +17,7 @@ type PaletteStore = {
 
   activeVariable?: Variable
   setActiveVariable: (variable: Variable) => void
+  updateVariable: (id: string, properties: Variable) => void
 }
 
 export const usePaletteStore = create<PaletteStore>((set) => ({
@@ -58,6 +59,21 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
     set((prev) => ({
       ...prev,
       activeVariable: variable,
+    }))
+  },
+  updateVariable: (id, properties) => {
+    set((prev) => ({
+      ...prev,
+      variables: prev.variables.map((variable) => {
+        if (variable.id === id) {
+          return {
+            ...variable,
+            ...properties,
+          }
+        }
+
+        return variable
+      }),
     }))
   },
 }))

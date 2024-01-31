@@ -11,6 +11,8 @@ type BuilderProps = {
 
 export default function Builder({ className, style }: BuilderProps) {
   const variables = usePaletteStore((store) => store.variables)
+  const isUpdateAllowed = usePaletteStore((store) => store.isUpdateAllowed)
+  const activeVariable = usePaletteStore((store) => store.activeVariable)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
 
   if (!variables.length) {
@@ -27,13 +29,17 @@ export default function Builder({ className, style }: BuilderProps) {
   }
 
   return (
-    <div className={cn('flex flex-col gap-y-2 p-4', className)} style={style}>
+    <div className={cn('flex flex-col gap-y-2 p-4', className, { 'opacity-50': !isUpdateAllowed })} style={style}>
       {variables.map((variable) => (
         <div
           key={variable.id}
-          className="flex w-full cursor-pointer rounded-md border bg-card"
+          className={cn('flex w-full cursor-pointer rounded-md border bg-card', {
+            'border-2 border-gray-500': variable.id === activeVariable?.id,
+          })}
           onClick={() => {
-            setActiveVariable(variable)
+            if (isUpdateAllowed) {
+              setActiveVariable(variable)
+            }
           }}
         >
           <div className="flex-1 px-4 py-2">

@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { Edit2, Save } from 'lucide-react'
+import { z } from 'zod'
 import ErrorMessage from '~/components/ui/error-message'
 import Loader from '~/components/ui/loader'
 import { api } from '~/trpc/react'
@@ -16,6 +17,9 @@ import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 import { usePaletteStore } from '~/stores'
 import ColorPicker from '~/components/color-picker'
+import { variableSchema } from '~/schema/palette'
+import AddVariableDialog from '../_components/add-variable-dialog'
+import Builder from '../_components/builder'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -27,6 +31,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
 
   const paletteData = usePaletteStore((store) => store.basicData)
   const setPaletteData = usePaletteStore((store) => store.updateBasicData)
+  const updateVariables = usePaletteStore((store) => store.updateVariables)
 
   const paletteQuery = api.palettes.findOneBySlug.useQuery(params.slug, {
     onSuccess: (data) => {
@@ -35,6 +40,11 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
         visibility: data.visibility,
         backgroundColor: data.backgroundColor ?? '',
       })
+
+      const result = z.array(variableSchema).safeParse(data.variables)
+      if (result.success) {
+        updateVariables(result.data)
+      }
     },
   })
 
@@ -130,18 +140,21 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
             </div>
           </div>
 
-          {/* Palette builder */}
+          <Builder />
         </div>
         <div className="border-l">
           <div className="border-b p-4">
-            <p className="mb-2 text-sm text-muted-foreground">Background Color</p>
-            <ColorPicker
-              disabled={!isUpdateAllowed}
-              value={paletteData?.backgroundColor}
-              onChange={(color) => {
-                setPaletteData({ backgroundColor: color })
-              }}
-            />
+            <div className="mb-2">
+              <p className="mb-2 text-sm text-muted-foreground">Background Color</p>
+              <ColorPicker
+                disabled={!isUpdateAllowed}
+                value={paletteData?.backgroundColor}
+                onChange={(color) => {
+                  setPaletteData({ backgroundColor: color })
+                }}
+              />
+            </div>
+            <AddVariableDialog />
           </div>
         </div>
       </div>

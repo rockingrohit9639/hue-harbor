@@ -3,7 +3,6 @@
 import { match } from 'ts-pattern'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
-import { useState } from 'react'
 import { Edit2, Save } from 'lucide-react'
 import { z } from 'zod'
 import ErrorMessage from '~/components/ui/error-message'
@@ -27,11 +26,13 @@ type PaletteBuilderProps = {
 
 export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const { data: session } = useSession()
-  const [isUpdateAllowed, setIsUpdateAllowed] = useState(false)
 
   const paletteData = usePaletteStore((store) => store.basicData)
   const setPaletteData = usePaletteStore((store) => store.updateBasicData)
   const updateVariables = usePaletteStore((store) => store.updateVariables)
+  const isUpdateAllowed = usePaletteStore((store) => store.isUpdateAllowed)
+  const variables = usePaletteStore((store) => store.variables)
+  const setIsUpdateAllowed = usePaletteStore((store) => store.setIsUpdateAllowed)
 
   const paletteQuery = api.palettes.findOneBySlug.useQuery(params.slug, {
     onSuccess: (data) => {
@@ -71,7 +72,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
       </div>
     ))
     .with({ status: 'success' }, ({ data }) => (
-      <div className="grid h-screen grid-cols-5">
+      <div className="grid h-screen grid-cols-5 overflow-y-hidden">
         <div className="relative col-span-4">
           <div
             className="pointer-events-none absolute inset-0 z-0 opacity-10"
@@ -121,7 +122,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
                   loading={updatePaletteMutation.isLoading}
                   icon={<Save className="h-4 w-4" />}
                   onClick={() => {
-                    updatePaletteMutation.mutate({ id: data.id, ...paletteData })
+                    updatePaletteMutation.mutate({ id: data.id, ...paletteData, variables })
                   }}
                 >
                   Save Changes
@@ -142,7 +143,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
 
           <Builder />
         </div>
-        <div className="border-l">
+        <div className="flex flex-col border-l">
           <div className="border-b p-4">
             <div className="mb-2">
               <p className="mb-2 text-sm text-muted-foreground">Background Color</p>
@@ -154,8 +155,16 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
                 }}
               />
             </div>
-            <AddVariableDialog />
+            <AddVariableDialog triggerProps={{ className: 'w-full', disabled: !isUpdateAllowed }} />
           </div>
+
+          {!isUpdateAllowed && (
+            <div className="flex flex-1 items-center justify-center p-4">
+              <p className="text-center text-sm text-muted-foreground">
+                Click on Update Palette to start editing your palette.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     ))

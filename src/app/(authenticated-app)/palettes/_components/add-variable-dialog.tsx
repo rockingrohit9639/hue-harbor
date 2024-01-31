@@ -3,7 +3,8 @@
 import { Variable } from 'lucide-react'
 import { cloneElement, useState } from 'react'
 import { match } from 'ts-pattern'
-import { Button } from '~/components/ui/button'
+import { nanoid } from 'nanoid'
+import { BaseButtonProps, Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -20,17 +21,21 @@ import { usePaletteStore } from '~/stores'
 type AddVariableDialogProps = {
   className?: string
   style?: React.CSSProperties
+  triggerProps?: BaseButtonProps
 }
 
-export default function AddVariableDialog({ className, style }: AddVariableDialogProps) {
+export default function AddVariableDialog({ className, style, triggerProps }: AddVariableDialogProps) {
   const [open, setOpen] = useState(false)
   const addVariable = usePaletteStore((store) => store.addVariable)
 
   function handleAddNewVariable(type: VariableType) {
+    const id = nanoid()
+
     /** Using ts-pattern here will be helpful in case if we add more variable types */
     match(type)
       .with('color', () => {
         addVariable({
+          id,
           name: '',
           identifier: '',
           type: 'color',
@@ -39,6 +44,7 @@ export default function AddVariableDialog({ className, style }: AddVariableDialo
       })
       .with('number', () => {
         addVariable({
+          id,
           name: '',
           identifier: '',
           type: 'number',
@@ -53,7 +59,7 @@ export default function AddVariableDialog({ className, style }: AddVariableDialo
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button icon={<Variable />} className="w-full">
+        <Button icon={<Variable />} {...triggerProps}>
           Add variable
         </Button>
       </DialogTrigger>

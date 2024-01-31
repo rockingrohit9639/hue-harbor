@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 const basicVariableSchema = z.object({
+  id: z.string(),
   name: z.string(),
   identifier: z.string(),
 })

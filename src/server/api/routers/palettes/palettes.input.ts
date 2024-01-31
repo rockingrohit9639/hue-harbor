@@ -1,6 +1,7 @@
 import { PaletteVisibility } from '@prisma/client'
 import { z } from 'zod'
 import { SLUG_REGEX } from '~/lib/constants'
+import { variableSchema } from '~/schema/palette'
 
 export const createPaletteInput = z.object({
   name: z
@@ -19,15 +20,7 @@ export const updatePaletteInput = createPaletteInput
   .partial()
   .extend({
     id: z.string(),
-    variables: z
-      .array(
-        z.object({
-          name: z.string({ required_error: 'Please provide a name for your variable' }),
-          type: z.enum(['COLOR', 'NUMBER']),
-          identifier: z.string({ required_error: 'Please provide an identifier for your variable' }),
-        }),
-      )
-      .default([]),
+    variables: z.array(variableSchema),
   })
   .superRefine(({ variables }, ctx) => {
     const uniqVariableIdentifies = new Set([...variables.map((v) => v.identifier)])

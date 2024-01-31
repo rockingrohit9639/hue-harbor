@@ -84,7 +84,7 @@ model Palette {
     // There can be two types of variables,
     // 1. Color -> as the name suggest
     // 2. Number -> can be used for borderRadius or fontSize
-    variables Json
+    variables Json[] @default([])
 
     // PUBLIC -> These palettes can be shared in the community and other can also use them in their projects
     // PRIVATE -> A palette is private to a user and he/she can use it in their own websites only

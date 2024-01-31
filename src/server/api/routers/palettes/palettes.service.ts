@@ -82,3 +82,40 @@ export async function deletePalette(id: string, prisma: PrismaClient, session: S
     where: { id: palette.id },
   })
 }
+
+export async function findPaletteBySlug(slug: string, prisma: PrismaClient, session: Session) {
+  const palette = await prisma.palette.findFirst({ where: { slug } })
+
+  if (!palette) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'Palette not found!',
+    })
+  }
+
+  if (palette.visibility === PaletteVisibility.PRIVATE && palette.createdById !== session.user.id) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'You are not allowed to access this palette!',
+    })
+  }
+
+  return palette
+}
+
+export async function getPreDeletePaletteStats(id: string, prisma: PrismaClient, session: Session) {
+  const palette = await findPaletteById(id, prisma, session)
+
+  if (palette.createdById !== session.user.id) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'You are not allowed to view these stats!',
+    })
+  }
+
+  const websitesUsingPalettes = await prisma.website.count({ where: { paletteId: id } })
+
+  return {
+    websites: websitesUsingPalettes,
+  }
+}

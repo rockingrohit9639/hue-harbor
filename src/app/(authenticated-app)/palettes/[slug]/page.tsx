@@ -14,6 +14,7 @@ import { Label } from '~/components/ui/label'
 import EditableInput from '~/components/ui/editable-input'
 import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
+import { usePaletteStore } from '~/stores'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -23,14 +24,8 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const { data: session } = useSession()
   const [isUpdateAllowed, setIsUpdateAllowed] = useState(false)
 
-  /** We need this state to manage the updation of palette */
-  const [paletteData, setPaletteData] = useState<{
-    name: string
-    visibility: 'PRIVATE' | 'PUBLIC'
-  }>({
-    name: '',
-    visibility: 'PRIVATE',
-  })
+  const paletteData = usePaletteStore((store) => store.basicData)
+  const setPaletteData = usePaletteStore((store) => store.updateBasicData)
 
   const paletteQuery = api.palettes.findOneBySlug.useQuery(params.slug, {
     onSuccess: (data) => {
@@ -70,13 +65,10 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
             <div>
               <EditableInput
                 editable={isUpdateAllowed}
-                value={paletteData.name}
+                value={paletteData?.name}
                 className="text-2xl font-bold"
                 onChange={(value) => {
-                  setPaletteData((prev) => ({
-                    ...prev,
-                    name: value,
-                  }))
+                  setPaletteData({ name: value })
                 }}
               />
               <div className="text-xs text-muted-foreground">{data.slug}</div>
@@ -90,12 +82,9 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
                 <Switch
                   id="visibility"
                   disabled={!isUpdateAllowed}
-                  checked={paletteData.visibility === 'PUBLIC'}
+                  checked={paletteData?.visibility === 'PUBLIC'}
                   onCheckedChange={(checked) => {
-                    setPaletteData((prev) => ({
-                      ...prev,
-                      visibility: checked === true ? 'PUBLIC' : 'PRIVATE',
-                    }))
+                    setPaletteData({ visibility: checked === true ? 'PUBLIC' : 'PRIVATE' })
                   }}
                 />
                 <Label htmlFor="visibility" className="!text-sm">

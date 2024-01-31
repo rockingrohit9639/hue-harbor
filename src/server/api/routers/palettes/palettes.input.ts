@@ -1,3 +1,4 @@
+import { PaletteVisibility } from '@prisma/client'
 import { z } from 'zod'
 import { SLUG_REGEX } from '~/lib/constants'
 
@@ -6,7 +7,7 @@ export const createPaletteInput = z.object({
     .string({ required_error: 'Please enter name for your palette' })
     .min(4, 'Please enter at least 4 characters!')
     .max(100, 'Please enter at most 100 characters!'),
-  visibility: z.enum(['PUBLIC', 'PRIVATE']).default('PRIVATE').optional(),
+  visibility: z.nativeEnum(PaletteVisibility).default('PRIVATE').optional(),
   backgroundColor: z.string().optional(),
   slug: z.string().regex(SLUG_REGEX, 'Please enter a valid slug!'),
 })

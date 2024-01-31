@@ -1,5 +1,7 @@
 import { PackageOpen } from 'lucide-react'
+import { match } from 'ts-pattern'
 import { cn } from '~/lib/utils'
+import { Variable } from '~/schema/palette'
 import { usePaletteStore } from '~/stores'
 
 type BuilderProps = {
@@ -9,6 +11,7 @@ type BuilderProps = {
 
 export default function Builder({ className, style }: BuilderProps) {
   const variables = usePaletteStore((store) => store.variables)
+  const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
 
   if (!variables.length) {
     return (
@@ -24,10 +27,33 @@ export default function Builder({ className, style }: BuilderProps) {
   }
 
   return (
-    <div className={cn('p-4', className)} style={style}>
+    <div className={cn('flex flex-col gap-y-2 p-4', className)} style={style}>
       {variables.map((variable) => (
-        <div key={variable.id}>{variable.id}</div>
+        <div
+          key={variable.id}
+          className="flex w-full cursor-pointer rounded-md border bg-card"
+          onClick={() => {
+            setActiveVariable(variable)
+          }}
+        >
+          <div className="flex-1 px-4 py-2">
+            <h1 className="text-lg font-bold">{variable.name}</h1>
+            <p className="text-sm text-muted-foreground">{variable.identifier}</p>
+          </div>
+          <div className="flex items-center justify-center border-l px-4 py-2">
+            <VariablePreview variable={variable} />
+          </div>
+        </div>
       ))}
     </div>
   )
+}
+
+function VariablePreview({ variable }: { variable: Variable }) {
+  return match(variable)
+    .with({ type: 'color' }, ({ value }) => (
+      <div className="h-10 w-10 rounded-md bg-white" style={{ backgroundColor: value }} />
+    ))
+    .with({ type: 'number' }, ({ value }) => <div className="text-4xl font-bold opacity-50">{value}</div>)
+    .exhaustive()
 }

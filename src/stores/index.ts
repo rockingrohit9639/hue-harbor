@@ -14,6 +14,9 @@ type PaletteStore = {
   /** Variables */
   updateVariables: (variables: Variable[]) => void
   addVariable: (variable: Variable) => void
+
+  activeVariable?: Variable
+  setActiveVariable: (variable: Variable) => void
 }
 
 export const usePaletteStore = create<PaletteStore>((set) => ({
@@ -38,6 +41,7 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
   },
 
   /** Variables */
+  activeVariable: undefined,
   updateVariables: (variables) => {
     set((prev) => ({
       ...prev,
@@ -48,6 +52,12 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
     set((prev) => ({
       ...prev,
       variables: [variable, ...prev.variables],
+    }))
+  },
+  setActiveVariable: (variable) => {
+    set((prev) => ({
+      ...prev,
+      activeVariable: variable,
     }))
   },
 }))

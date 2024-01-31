@@ -36,8 +36,8 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
       .with('color', () => {
         addVariable({
           id,
-          name: '',
-          identifier: '',
+          name: 'My number Variable',
+          identifier: '--my-color-variable',
           type: 'color',
           value: '',
         })
@@ -45,8 +45,8 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
       .with('number', () => {
         addVariable({
           id,
-          name: '',
-          identifier: '',
+          name: 'My number variable',
+          identifier: '--my-number-variable',
           type: 'number',
           value: 0,
         })

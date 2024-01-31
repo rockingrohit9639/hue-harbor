@@ -7,9 +7,18 @@ type ColorPickerProps = React.ComponentProps<typeof BestColorPicker> & {
   className?: string
   style?: React.CSSProperties
   trigger?: React.ReactElement
+  disabled?: boolean
 }
 
-export default function ColorPicker({ className, style, trigger, value, onChange, ...pickerProps }: ColorPickerProps) {
+export default function ColorPicker({
+  className,
+  style,
+  trigger,
+  value,
+  onChange,
+  disabled,
+  ...pickerProps
+}: ColorPickerProps) {
   const [color, setColor] = useState(value)
 
   function handleColorChange(color: string) {
@@ -19,13 +28,14 @@ export default function ColorPicker({ className, style, trigger, value, onChange
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild disabled={disabled}>
         {trigger ? (
-          cloneElement(trigger)
+          cloneElement(trigger, { disabled })
         ) : (
           <div
             className={cn(
               'flex cursor-pointer items-center gap-2 rounded-md border px-4 py-2 text-muted-foreground',
+              { 'pointer-events-none cursor-not-allowed opacity-50': disabled },
               className,
             )}
             style={style}

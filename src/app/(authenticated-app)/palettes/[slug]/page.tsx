@@ -15,6 +15,7 @@ import EditableInput from '~/components/ui/editable-input'
 import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 import { usePaletteStore } from '~/stores'
+import ColorPicker from '~/components/color-picker'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -32,6 +33,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
       setPaletteData({
         name: data.name,
         visibility: data.visibility,
+        backgroundColor: data.backgroundColor ?? '',
       })
     },
   })
@@ -60,8 +62,16 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
     ))
     .with({ status: 'success' }, ({ data }) => (
       <div className="grid h-screen grid-cols-5">
-        <div className="col-span-4">
-          <div className="flex justify-between border-b p-4">
+        <div className="relative col-span-4">
+          <div
+            className="pointer-events-none absolute inset-0 z-0 opacity-10"
+            style={{
+              background: paletteData?.backgroundColor ? paletteData.backgroundColor : undefined,
+              display: paletteData?.backgroundColor ? 'block' : 'none',
+            }}
+          />
+
+          <div className="relative z-10 flex justify-between border-b !bg-background p-4">
             <div>
               <EditableInput
                 editable={isUpdateAllowed}
@@ -119,8 +129,21 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
               )}
             </div>
           </div>
+
+          {/* Palette builder */}
         </div>
-        <div className="border-l p-4">Test</div>
+        <div className="border-l">
+          <div className="border-b p-4">
+            <p className="mb-2 text-sm text-muted-foreground">Background Color</p>
+            <ColorPicker
+              disabled={!isUpdateAllowed}
+              value={paletteData?.backgroundColor}
+              onChange={(color) => {
+                setPaletteData({ backgroundColor: color })
+              }}
+            />
+          </div>
+        </div>
       </div>
     ))
     .exhaustive()

@@ -64,6 +64,7 @@ export async function updatePalette(input: UpdatePaletteInput, prisma: PrismaCli
       name: input.name,
       visibility: input.visibility,
       variables: input.variables,
+      backgroundColor: input.backgroundColor,
     },
   })
 }

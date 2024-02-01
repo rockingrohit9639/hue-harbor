@@ -1,5 +1,5 @@
 import { Hash, Pipette } from 'lucide-react'
-import { VariableType } from '~/schema/palette'
+import { Variable, VariableType } from '~/schema/palette'
 
 export const VARIABLES = [
   {
@@ -21,3 +21,15 @@ export const VARIABLES = [
   description: string
   icon: React.ReactElement<{ className?: string }>
 }>
+
+export function generateCSS(variables: Variable[]) {
+  let css = ':root {\n'
+
+  for (const variable of variables) {
+    css += `\t${variable.identifier} : ${variable.value};\n`
+  }
+
+  css += '}\n'
+
+  return css
+}

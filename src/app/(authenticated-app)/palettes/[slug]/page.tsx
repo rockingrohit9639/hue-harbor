@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { Edit2, Save } from 'lucide-react'
 import { z } from 'zod'
+import { usePrevious } from '@uidotdev/usehooks'
 import ErrorMessage from '~/components/ui/error-message'
 import Loader from '~/components/ui/loader'
 import { api } from '~/trpc/react'
@@ -20,6 +21,7 @@ import { variableSchema } from '~/schema/palette'
 import AddVariableDialog from '../_components/add-variable-dialog'
 import Builder from '../_components/builder'
 import VariableProperties from '../_components/variable-properties'
+import useUnsavedChanges from '~/hooks/use-unsaved-changes'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -35,6 +37,9 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const variables = usePaletteStore((store) => store.variables)
   const setIsUpdateAllowed = usePaletteStore((store) => store.setIsUpdateAllowed)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
+
+  const previousVariables = usePrevious(variables)
+  useUnsavedChanges(JSON.stringify(variables) !== JSON.stringify(previousVariables))
 
   const paletteQuery = api.palettes.findOneBySlug.useQuery(params.slug, {
     onSuccess: (data) => {

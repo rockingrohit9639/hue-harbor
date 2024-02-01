@@ -43,7 +43,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     websites      Website[]
-    Palette       Palette[]
+    palettes      Palette[]
+    apiKeys       ApiKey[]
 }
 
 model VerificationToken {
@@ -98,4 +99,17 @@ model Palette {
     updatedAt DateTime @updatedAt
 
     @@index([name, slug])
+}
+
+model ApiKey {
+    id    String @id @default(auto()) @map("_id") @db.ObjectId
+    name  String
+    value String @unique
+    usage Int    @default(0) // 👉 to keep track of how much a user has used an API key
+
+    createdBy   User   @relation(fields: [createdById], references: [id], onDelete: Cascade)
+    createdById String @db.ObjectId
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

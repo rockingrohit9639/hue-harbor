@@ -3,13 +3,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { match } from 'ts-pattern'
-import ColorPicker from '~/components/color-picker'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
-import { Input } from '~/components/ui/input'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { cn } from '~/lib/utils'
-import { Variable, variableSchema } from '~/schema/palette'
+import { variableSchema } from '~/schema/palette'
 import { usePaletteStore } from '~/stores'
+import { VARIABLE_PROPERTY_MAP } from '~/lib/palette'
+import PropertyInput from './property-input'
 
 type VariablePropertiesProps = {
   className?: string
@@ -21,7 +20,7 @@ export default function VariableProperties({ className, style }: VariablePropert
   const activeVariable = usePaletteStore((store) => store.activeVariable)
   const updateVariable = usePaletteStore((store) => store.updateVariable)
 
-  const form = useForm<Variable>({
+  const form = useForm<Record<string, unknown>>({
     resolver: zodResolver(variableSchema),
     mode: 'onBlur',
     defaultValues: {
@@ -36,7 +35,7 @@ export default function VariableProperties({ className, style }: VariablePropert
     [activeVariable, form],
   )
 
-  function applyChanges(variable: Variable) {
+  function applyChanges(variable: Record<string, unknown>) {
     if (!activeVariable) return
 
     updateVariable(activeVariable.id, {
@@ -63,6 +62,8 @@ export default function VariableProperties({ className, style }: VariablePropert
     )
   }
 
+  const variableProperties = VARIABLE_PROPERTY_MAP[activeVariable.type]
+
   return (
     <Form {...form}>
       <form
@@ -73,64 +74,24 @@ export default function VariableProperties({ className, style }: VariablePropert
           e.preventDefault()
         }}
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your variable name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {variableProperties.map((property) => (
+          <FormField
+            key={property.id}
+            control={form.control}
+            name={property.id}
+            render={() => (
+              <FormItem className={className} style={style}>
+                <FormLabel>{property.title}</FormLabel>
+                <FormControl>
+                  <PropertyInput property={property} />
+                </FormControl>
 
-        <FormField
-          control={form.control}
-          name="identifier"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>CSS Identifier</FormLabel>
-              <FormControl>
-                <Input placeholder="CSS variable identifier" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="value"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Value</FormLabel>
-              <FormControl>
-                {match(activeVariable)
-                  .with({ type: 'color' }, () => (
-                    <ColorPicker
-                      value={'rgba(240.98726550000003, 20.999734499999924, 20.999734499999924, 1)'}
-                      onChange={field.onChange}
-                    />
-                  ))
-                  .with({ type: 'number' }, () => (
-                    <Input
-                      type="number"
-                      placeholder="Value of your variable"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e.currentTarget.valueAsNumber)
-                      }}
-                    />
-                  ))
-                  .exhaustive()}
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                {!!property.description && <FormDescription>{property.description}</FormDescription>}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
       </form>
     </Form>
   )

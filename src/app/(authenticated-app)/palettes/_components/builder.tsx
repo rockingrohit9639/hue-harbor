@@ -60,6 +60,11 @@ function VariablePreview({ variable }: { variable: Variable }) {
     .with({ type: 'color' }, ({ value }) => (
       <div className="h-10 w-10 rounded-md bg-white" style={{ backgroundColor: value }} />
     ))
-    .with({ type: 'number' }, ({ value }) => <div className="text-4xl font-bold opacity-50">{value}</div>)
+    .with({ type: 'number' }, ({ value, unit }) => (
+      <div className="text-4xl font-bold opacity-50">
+        {value}
+        <span className="text-lg font-normal">{unit}</span>
+      </div>
+    ))
     .exhaustive()
 }

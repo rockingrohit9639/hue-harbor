@@ -13,6 +13,7 @@ export const variableSchema = z.discriminatedUnion('type', [
   basicVariableSchema.extend({
     type: z.literal('number'),
     value: z.number(),
+    unit: z.string().optional(),
   }),
 ])
 

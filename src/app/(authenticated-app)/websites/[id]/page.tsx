@@ -12,6 +12,7 @@ import ErrorMessage from '~/components/ui/error-message'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import Loader from '~/components/ui/loader'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
 import { cn } from '~/lib/utils'
 import { UpdateWebsiteInput, updateWebsiteInput } from '~/server/api/routers/websites/websites.input'
@@ -28,9 +29,12 @@ export default function WebsiteDetails({ params }: { params: { id: string } }) {
         name: data.name,
         description: data.description ?? '',
         url: data.url,
+        palette: data.paletteId ?? undefined,
       })
     },
   })
+
+  const palettesQuery = api.palettes.findAll.useQuery()
 
   const updateWebsiteMutation = api.websites.update.useMutation({
     onSuccess: () => {
@@ -96,6 +100,32 @@ export default function WebsiteDetails({ params }: { params: { id: string } }) {
                   <FormLabel>URL</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., www.myportfolio.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="palette"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Palette</FormLabel>
+                  <FormControl>
+                    <Select {...field} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Palette" />
+
+                        <SelectContent>
+                          {palettesQuery.data?.map((palette) => (
+                            <SelectItem key={palette.id} value={palette.id}>
+                              {palette.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </SelectTrigger>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

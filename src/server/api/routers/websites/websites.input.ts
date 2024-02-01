@@ -14,5 +14,7 @@ export const createWebsiteInput = z.object({
 
 export type CreateWebsiteInput = z.infer<typeof createWebsiteInput>
 
-export const updateWebsiteInput = createWebsiteInput.partial().extend({ id: z.string() })
+export const updateWebsiteInput = createWebsiteInput
+  .partial()
+  .extend({ id: z.string(), palette: z.string().optional() })
 export type UpdateWebsiteInput = z.infer<typeof updateWebsiteInput>

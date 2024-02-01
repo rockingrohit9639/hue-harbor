@@ -1,12 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { EditIcon } from 'lucide-react'
 import { match } from 'ts-pattern'
 import Container from '~/components/ui/container'
 import CreateWebsiteDialog from './_components/create-website-dialog'
-import { cn } from '~/lib/utils'
-import { buttonVariants } from '~/components/ui/button'
 import { api } from '~/trpc/react'
 import ErrorMessage from '~/components/ui/error-message'
 import DeleteWebsiteDialog from './_components/delete-website-dialog'
@@ -50,7 +47,7 @@ export default function Websites() {
 
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {websites.map((website) => (
-            <div key={website.id} className="space-y-2 rounded-md border bg-card p-4">
+            <Link key={website.id} className="space-y-2 rounded-md border bg-card p-4" href={`/websites/${website.id}`}>
               <h1 className="text-xl font-bold">{website.name}</h1>
               {!!website.description && <p className="text-sm text-muted-foreground">{website.description}</p>}
 
@@ -62,14 +59,8 @@ export default function Websites() {
                 {website.url}
               </Link>
 
-              <div className="flex items-center gap-2">
-                <Link href={`/websites/${website.id}`} className={cn(buttonVariants({ variant: 'secondary' }))}>
-                  <EditIcon className="h-4 w-4" />
-                </Link>
-
-                <DeleteWebsiteDialog id={website.id} />
-              </div>
-            </div>
+              <DeleteWebsiteDialog id={website.id} />
+            </Link>
           ))}
         </div>
       </Container>

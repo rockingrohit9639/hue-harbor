@@ -1,4 +1,4 @@
-import { cloneElement } from 'react'
+import { cloneElement, useState } from 'react'
 import { AlertDialogActionProps, AlertDialogCancelProps } from '@radix-ui/react-alert-dialog'
 import {
   AlertDialog,
@@ -16,7 +16,7 @@ import { Button } from './button'
 type AlertProps = {
   className?: string
   style?: React.CSSProperties
-  trigger: React.ReactElement
+  trigger: React.ReactElement<{ onClick: (e: MouseEvent) => void }>
   title: string
   description?: string
   cancelText?: string
@@ -42,11 +42,27 @@ export default function Alert({
   onOk,
   loading,
 }: AlertProps) {
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{cloneElement(trigger)}</AlertDialogTrigger>
+  const [open, setOpen] = useState(false)
 
-      <AlertDialogContent className={className} style={style}>
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        {cloneElement(trigger, {
+          onClick: (e: MouseEvent) => {
+            e.preventDefault()
+            setOpen(true)
+          },
+        })}
+      </AlertDialogTrigger>
+
+      <AlertDialogContent
+        className={className}
+        style={style}
+        onClick={(e) => {
+          e.stopPropagation()
+          e.preventDefault()
+        }}
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           {!!description && <AlertDialogDescription>{description}</AlertDialogDescription>}

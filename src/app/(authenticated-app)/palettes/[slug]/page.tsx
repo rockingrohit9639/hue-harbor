@@ -34,6 +34,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const isUpdateAllowed = usePaletteStore((store) => store.isUpdateAllowed)
   const variables = usePaletteStore((store) => store.variables)
   const setIsUpdateAllowed = usePaletteStore((store) => store.setIsUpdateAllowed)
+  const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
 
   const paletteQuery = api.palettes.findOneBySlug.useQuery(params.slug, {
     onSuccess: (data) => {
@@ -53,6 +54,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const updatePaletteMutation = api.palettes.update.useMutation({
     onSuccess: () => {
       paletteQuery.refetch()
+      setActiveVariable(undefined)
       setIsUpdateAllowed(false)
       toast.success('Palette updated successfully!')
     },

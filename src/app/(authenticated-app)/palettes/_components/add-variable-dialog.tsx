@@ -39,7 +39,7 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
           name: 'My number Variable',
           identifier: '--my-color-variable',
           type: 'color',
-          value: '',
+          value: '#000000',
         })
       })
       .with('number', () => {

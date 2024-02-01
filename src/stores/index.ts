@@ -16,7 +16,7 @@ type PaletteStore = {
   addVariable: (variable: Variable) => void
 
   activeVariable?: Variable
-  setActiveVariable: (variable: Variable) => void
+  setActiveVariable: (variable: Variable | undefined) => void
   updateVariable: (id: string, properties: Variable) => void
 }
 

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { GlobeIcon, HomeIcon, LogOutIcon, SwatchBookIcon } from 'lucide-react'
+import { GlobeIcon, HomeIcon, Key, LogOutIcon, SwatchBookIcon } from 'lucide-react'
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -33,6 +33,11 @@ export const ROUTES = [
     path: '/palettes',
     label: 'My Palettes',
     icon: <SwatchBookIcon />,
+  },
+  {
+    path: '/api-keys',
+    label: 'My API Keys',
+    icon: <Key />,
   },
 ]
 

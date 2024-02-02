@@ -19,7 +19,7 @@ export async function createApiKey(input: CreateApiKeyInput, prisma: PrismaClien
   return prisma.apiKey.create({
     data: {
       name: input.name,
-      value: nanoid(100),
+      value: nanoid(60),
       createdBy: { connect: { id: session.user.id } },
     },
   })

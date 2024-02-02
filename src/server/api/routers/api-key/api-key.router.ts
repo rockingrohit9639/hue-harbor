@@ -8,5 +8,5 @@ export const apiKeyRouter = createTRPCRouter({
     .input(createApiKeyInput)
     .mutation(({ input, ctx }) => createApiKey(input, ctx.db, ctx.session)),
   findAll: protectedProcedure.query(({ ctx }) => findAllApiKeys(ctx.db, ctx.session)),
-  copy: protectedProcedure.input(z.string()).query(({ input, ctx }) => copyApiKey(input, ctx.db, ctx.session)),
+  copy: protectedProcedure.input(z.string()).mutation(({ input, ctx }) => copyApiKey(input, ctx.db, ctx.session)),
 })

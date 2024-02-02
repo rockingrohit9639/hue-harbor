@@ -8,6 +8,7 @@ import Loader from '~/components/ui/loader'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '~/components/ui/table'
 import { api } from '~/trpc/react'
 import CreateApiKeyDialog from './_components/create-api-key-dialog'
+import CopyApiKey from './_components/copy-api-key'
 
 export default function ApiKeys() {
   const apiKeysQuery = api.apiKeys.findAll.useQuery()
@@ -22,7 +23,7 @@ export default function ApiKeys() {
           Manage and configure API keys for accessing restricted resources and services.
         </p>
 
-        <div className="flex items-center justify-end my-4">
+        <div className="my-4 flex items-center justify-end">
           <CreateApiKeyDialog />
         </div>
 
@@ -48,7 +49,9 @@ export default function ApiKeys() {
                   <TableCell>{i + 1}</TableCell>
                   <TableCell>{apiKey.name}</TableCell>
                   <TableCell>{apiKey.value}</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell>
+                    <CopyApiKey apiKeyId={apiKey.id} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

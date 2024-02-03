@@ -31,14 +31,35 @@ export async function GET(_: Request, { params }: { params: { palette: string } 
     return NextResponse.json({ message: 'Variables not configured properly!' }, { status: 400 })
   }
 
-  return NextResponse.json({
-    message: 'Palette found!',
-    data: result.data.map((variable) => ({
-      variableName: variable.identifier,
-      value: match(variable)
-        .with({ type: 'color' }, ({ value }) => value)
-        .with({ type: 'number' }, ({ value, unit }) => `${value}${unit ?? ''}`)
-        .exhaustive(),
-    })),
+  return NextResponse.json(
+    {
+      message: 'Palette found!',
+      data: result.data.map((variable) => ({
+        variableName: variable.identifier,
+        value: match(variable)
+          .with({ type: 'color' }, ({ value }) => value)
+          .with({ type: 'number' }, ({ value, unit }) => `${value}${unit ?? ''}`)
+          .exhaustive(),
+      })),
+    },
+    {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    },
+  )
+}
+
+/** To enable CORS */
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
   })
 }

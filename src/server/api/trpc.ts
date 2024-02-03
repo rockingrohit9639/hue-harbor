@@ -43,3 +43,28 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
     },
   })
 })
+
+/** This procedure is used to authenticate a user using API Key */
+export const apiKeyProtectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+  const apiKeyHeader = ctx.headers.get('Authorization')
+
+  if (!apiKeyHeader) {
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not authorized to access this resource!' })
+  }
+
+  const apiKey = apiKeyHeader.split(' ').pop()
+  if (!apiKey) {
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You are not authorized to access this resource!' })
+  }
+
+  const apiKeyFound = await db.apiKey.findFirst({ where: { value: apiKey }, include: { createdBy: true } })
+  if (!apiKeyFound) {
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid API key found!' })
+  }
+
+  return next({
+    ctx: {
+      session: { user: apiKeyFound.createdBy },
+    },
+  })
+})

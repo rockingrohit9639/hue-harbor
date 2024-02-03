@@ -1,12 +1,12 @@
 'use client'
 
-import Link from 'next/link'
 import { match } from 'ts-pattern'
 import Container from '~/components/ui/container'
 import ErrorMessage from '~/components/ui/error-message'
 import Loader from '~/components/ui/loader'
 import { api } from '~/trpc/react'
 import CreatePaletteDialog from './_components/create-palette-dialog'
+import Palette from './_components/palette'
 
 export default function MyPalettes() {
   const palettesQuery = api.palettes.findAll.useQuery()
@@ -36,14 +36,7 @@ export default function MyPalettes() {
 
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {palettes.map((palette) => (
-            <Link
-              key={palette.id}
-              className="space-y-2 rounded-md bg-card p-4"
-              style={{ backgroundColor: palette.backgroundColor ? palette.backgroundColor : undefined }}
-              href={`/palettes/${palette.slug}`}
-            >
-              <h1 className="text-xl font-bold">{palette.name}</h1>
-            </Link>
+            <Palette key={palette.id} palette={palette} />
           ))}
         </div>
       </Container>

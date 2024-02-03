@@ -16,6 +16,7 @@ export const variableSchema = z.discriminatedUnion('type', [
     unit: z.string().optional(),
   }),
 ])
+export const variablesSchema = z.array(variableSchema)
 
 export type Variable = z.infer<typeof variableSchema>
 export type VariableType = Variable['type']

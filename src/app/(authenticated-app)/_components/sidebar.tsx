@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu'
 import { cn } from '~/lib/utils'
+import ThemeToggler from './theme-toggler'
 
 type SidebarProps = React.HTMLAttributes<HTMLDivElement>
 
@@ -67,6 +68,14 @@ export function Sidebar({ className, ...restProps }: SidebarProps) {
         </div>
 
         <div className="space-y-2">
+          <ThemeToggler
+            trigger={
+              <Button variant="outline" className="w-full">
+                Change Theme
+              </Button>
+            }
+          />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full cursor-pointer">

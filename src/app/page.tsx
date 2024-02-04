@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { cloneElement } from 'react'
 import colors from 'tailwindcss/colors'
+import { getServerAuthSession } from '~/server/auth'
 
 const BOX_COLORS = [
   colors.red['500'],
@@ -52,7 +53,9 @@ const STEPS = [
   },
 ]
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await getServerAuthSession()
+
   return (
     <div>
       <section className="h-screen w-full bg-gray-100 py-12 dark:bg-gray-800 md:py-24 lg:py-32">
@@ -65,7 +68,12 @@ export default function LandingPage() {
                 developers, and creatives. Whether you&apos;re building websites, apps, or graphic designs, Hue Harbor
                 provides the tools you need to unleash your creativity and bring your projects to life.
               </p>
-              <button className="w-max rounded-md bg-foreground px-4 py-3 text-white">Create Your Palette</button>
+              <Link
+                href={session?.user ? '/app' : '/auth/login'}
+                className="w-max rounded-md bg-foreground px-4 py-2 text-white"
+              >
+                Create Your Palette
+              </Link>
             </div>
             <div className="flex items-center justify-center">
               <div className="grid grid-cols-3 gap-4">
@@ -79,10 +87,16 @@ export default function LandingPage() {
       </section>
 
       {/* About Us */}
-      <section className="border-b md:border-b-0 md:bg-[#FBE3B3]">
+      <section className="border-b">
         <div className="container grid md:grid-cols-2">
           <div className="hidden h-full md:block">
-            <Image src="/about.png" alt="about" width={1000} height={1000} className="h-full w-full object-cover" />
+            <Image
+              src="/about.jpg"
+              alt="about"
+              width={1000}
+              height={1000}
+              className="h-full max-h-[500px] w-full object-cover"
+            />
           </div>
           <div className="flex flex-col items-end justify-center gap-4 p-8">
             <h1 className="text-right text-4xl font-bold tracking-tighter">Hue Harbor</h1>
@@ -91,6 +105,9 @@ export default function LandingPage() {
               developers, and creatives. Whether you&apos;re building websites, apps, or graphic designs, Hue Harbor
               provides the tools you need to unleash your creativity and bring your projects to life.
             </p>
+            <Link href="/public/palettes" className="w-max rounded-md bg-foreground px-4 py-2 text-white">
+              Explore Palettes
+            </Link>
           </div>
         </div>
       </section>

@@ -21,7 +21,7 @@ type SidebarProps = React.HTMLAttributes<HTMLDivElement>
 
 export const ROUTES = [
   {
-    path: '/',
+    path: '/app',
     label: 'Home',
     icon: <HomeIcon />,
   },

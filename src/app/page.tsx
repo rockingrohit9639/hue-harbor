@@ -1,3 +1,136 @@
+import { CogIcon, GithubIcon, PaintBucket, WaypointsIcon } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { cloneElement } from 'react'
+import colors from 'tailwindcss/colors'
+
+const BOX_COLORS = [
+  colors.red['500'],
+  colors.amber['500'],
+  colors.green['500'],
+  colors.blue['500'],
+  colors.violet['500'],
+  colors.emerald['500'],
+  colors.purple['500'],
+  colors.teal['500'],
+  colors.rose['500'],
+]
+
+const FEATURES = [
+  {
+    title: 'Create Custom Color Palettes',
+    content: 'Easily create personalized color palettes using our intuitive interface and advanced color tools.',
+    icon: <PaintBucket />,
+  },
+  {
+    title: 'Manage Your Palettes',
+    content: 'Organize, edit, and customize your color palettes with ease, ensuring consistency across your projects.',
+    icon: <CogIcon />,
+  },
+  {
+    title: 'Seamless Integration',
+    content: 'Integrate your palettes into your projects effortlessly using our CDN or API options.',
+    icon: <WaypointsIcon />,
+  },
+]
+
+const STEPS = [
+  {
+    title: 'Sign Up for Free',
+    content:
+      'Create your Hue Harbor account in minutes and gain instant access to our powerful palette management tools.',
+  },
+  {
+    title: 'Create Your Palette',
+    content:
+      'Use our color picker and customization options to create your custom color palette or import existing palettes.',
+  },
+  {
+    title: 'Integrate with Your Projects',
+    content:
+      'Easily integrate your palettes into your websites, apps, or designs using our provided CDN or plugin options.',
+  },
+]
+
 export default function LandingPage() {
-  return <div>Landing page</div>
+  return (
+    <div>
+      <section className="h-screen w-full bg-gray-100 py-12 dark:bg-gray-800 md:py-24 lg:py-32">
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="container grid h-full w-full md:grid-cols-2">
+            <div className="flex flex-col justify-center gap-4 md:max-w-[90%]">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-6xl">Welcome to Hue Harbor</h1>
+              <p className="text-lg tracking-tight text-muted-foreground">
+                Hue Harbor is a versatile platform designed to simplify color palette management for designers,
+                developers, and creatives. Whether you&apos;re building websites, apps, or graphic designs, Hue Harbor
+                provides the tools you need to unleash your creativity and bring your projects to life.
+              </p>
+              <button className="w-max rounded-md bg-foreground px-4 py-3 text-white">Create Your Palette</button>
+            </div>
+            <div className="flex items-center justify-center">
+              <div className="grid grid-cols-3 gap-4">
+                {BOX_COLORS.map((color) => (
+                  <div key={color} className="h-20 w-20 rounded" style={{ backgroundColor: color }} />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Us */}
+      <section className="border-b md:border-b-0 md:bg-[#FBE3B3]">
+        <div className="container grid md:grid-cols-2">
+          <div className="hidden h-full md:block">
+            <Image src="/about.png" alt="about" width={1000} height={1000} className="h-full w-full object-cover" />
+          </div>
+          <div className="flex flex-col items-end justify-center gap-4 p-8">
+            <h1 className="text-right text-4xl font-bold tracking-tighter">Hue Harbor</h1>
+            <p className="text-right text-lg tracking-tight text-muted-foreground">
+              Hue Harbor is a versatile platform designed to simplify color palette management for designers,
+              developers, and creatives. Whether you&apos;re building websites, apps, or graphic designs, Hue Harbor
+              provides the tools you need to unleash your creativity and bring your projects to life.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Features  */}
+      <section className="container grid gap-4 py-20 md:grid-cols-3">
+        {FEATURES.map((feature, i) => (
+          <div key={i} className="flex flex-col items-center justify-center gap-4 rounded-md border p-4 shadow">
+            <div className="flex items-center justify-center rounded-md bg-primary p-4">
+              {cloneElement(feature.icon, { className: 'text-white' })}
+            </div>
+            <h1 className="text-lg font-bold">{feature.title}</h1>
+            <p className="text-center text-sm text-muted-foreground">{feature.content}</p>
+          </div>
+        ))}
+      </section>
+
+      <section className="mx-auto flex max-w-screen-sm flex-col items-center justify-center gap-4 px-10 py-20">
+        {STEPS.map((step, i) => (
+          <>
+            <div className="rounded-md border px-4 py-2">
+              <h1 className="mb-2 text-2xl font-bold">
+                {i + 1}. {step.title}
+              </h1>
+              <p>{step.content}</p>
+            </div>
+            {i < STEPS.length - 1 ? <div className="h-10 w-[1px] bg-gray-500" /> : null}
+          </>
+        ))}
+      </section>
+
+      <footer className="border-t">
+        <div className="container flex items-center justify-between p-4">
+          <div>&copy; 2024 Rohit Saini</div>
+
+          <Link href="https://github.com/rockingrohit9639/hue-harbor" target="_blank">
+            <GithubIcon />
+          </Link>
+        </div>
+      </footer>
+    </div>
+  )
 }

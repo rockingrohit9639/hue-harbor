@@ -66,9 +66,8 @@ export default async function LandingPage() {
             <div className="flex flex-col justify-center gap-4 md:max-w-[90%]">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-6xl">Welcome to Hue Harbor</h1>
               <p className="text-lg tracking-tight text-muted-foreground">
-                Hue Harbor is a versatile platform designed to simplify color palette management for designers,
-                developers, and creatives. Whether you&apos;re building websites, apps, or graphic designs, Hue Harbor
-                provides the tools you need to unleash your creativity and bring your projects to life.
+                Unleash your creativity with Hue Harbor. Effortlessly manage and integrate stunning color palettes into
+                your projects. Get started today and elevate your designs.
               </p>
               <Link
                 href={session?.user ? '/app' : '/auth/login'}
@@ -103,9 +102,10 @@ export default async function LandingPage() {
           <div className="flex flex-col items-end justify-center gap-4 p-8">
             <h1 className="text-right text-4xl font-bold tracking-tighter">Hue Harbor</h1>
             <p className="text-right text-lg tracking-tight text-muted-foreground">
-              Hue Harbor is a versatile platform designed to simplify color palette management for designers,
-              developers, and creatives. Whether you&apos;re building websites, apps, or graphic designs, Hue Harbor
-              provides the tools you need to unleash your creativity and bring your projects to life.
+              At Hue Harbor, we are passionate about simplifying color palette management for designers, developers, and
+              creatives. Our platform provides intuitive tools to create, customize, and integrate stunning color
+              palettes seamlessly. Join our community and bring your projects to life with vibrant colors and effortless
+              creativity.
             </p>
             <Link href="/public/palettes" className="w-max rounded-md bg-foreground px-4 py-2 text-white">
               Explore Palettes

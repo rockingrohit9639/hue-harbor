@@ -19,10 +19,10 @@ export default function Navbar({ className, style }: NavbarProps) {
       style={style}
     >
       <div className="container flex h-full items-center justify-between">
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="logo" width={100} height={100} className="w-10 object-contain" />
           <h1 className="text-xl font-bold">Hue Harbor</h1>
-        </div>
+        </Link>
         <div className="flex items-center gap-4">
           {data?.user ? <Link href="/app">Dashboard</Link> : <Link href="/auth/login">Login</Link>}
         </div>

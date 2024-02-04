@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { cloneElement } from 'react'
 import colors from 'tailwindcss/colors'
+import Navbar from '~/components/navbar'
 import { getServerAuthSession } from '~/server/auth'
 
 const BOX_COLORS = [
@@ -58,6 +59,7 @@ export default async function LandingPage() {
 
   return (
     <div>
+      <Navbar />
       <section className="h-screen w-full bg-gray-100 py-12 dark:bg-gray-800 md:py-24 lg:py-32">
         <div className="flex h-full w-full items-center justify-center">
           <div className="container grid h-full w-full md:grid-cols-2">

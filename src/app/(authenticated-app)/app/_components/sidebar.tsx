@@ -55,7 +55,7 @@ export function Sidebar({ className, ...restProps }: SidebarProps) {
     <div className={cn('h-full border-r', className)} {...restProps}>
       <div className="flex h-full flex-col justify-between space-y-4 px-3 py-4">
         <div>
-          <Link className="mb-4 flex flex-col items-center" href="/">
+          <Link className="mb-4 flex flex-col items-center" href="/app">
             <Image src="/logo.png" alt="logo" width={100} height={100} className="w-10" />
             <h1 className="text-center text-xl font-bold">Hue Harbor</h1>
           </Link>

@@ -40,6 +40,11 @@ export const ROUTES = [
     label: 'My API Keys',
     icon: <Key />,
   },
+  {
+    path: '/public/palettes',
+    label: 'Explore Palettes',
+    icon: <Key />,
+  },
 ]
 
 export function Sidebar({ className, ...restProps }: SidebarProps) {

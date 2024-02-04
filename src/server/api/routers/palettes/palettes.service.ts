@@ -120,3 +120,7 @@ export async function getPreDeletePaletteStats(id: string, prisma: PrismaClient,
     websites: websitesUsingPalettes,
   }
 }
+
+export async function findPublicPalettes(prisma: PrismaClient) {
+  return prisma.palette.findMany({ where: { visibility: 'PUBLIC' } })
+}

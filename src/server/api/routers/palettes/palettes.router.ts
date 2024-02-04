@@ -1,11 +1,12 @@
 import { z } from 'zod'
-import { createTRPCRouter, protectedProcedure } from '../../trpc'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../../trpc'
 import {
   createPalette,
   deletePalette,
   findAllPalettes,
   findPaletteById,
   findPaletteBySlug,
+  findPublicPalettes,
   getPreDeletePaletteStats,
   updatePalette,
 } from './palettes.service'
@@ -30,4 +31,5 @@ export const palettesRouter = createTRPCRouter({
     .input(updatePaletteInput)
     .mutation(({ input, ctx }) => updatePalette(input, ctx.db, ctx.session)),
   delete: protectedProcedure.input(z.string()).mutation(({ input, ctx }) => deletePalette(input, ctx.db, ctx.session)),
+  public: publicProcedure.query(({ ctx }) => findPublicPalettes(ctx.db)),
 })

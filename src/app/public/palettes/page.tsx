@@ -26,9 +26,9 @@ export default function PublicPalettes() {
       </div>
     ))
     .with({ status: 'success' }, ({ data }) => (
-      <div>
+      <div className="h-screen bg-white">
         <div className="flex flex-col items-center justify-center gap-2 bg-gray-100 px-4 py-20">
-          <h1 className="text-center text-3xl font-bold sm:text-5xl md:text-6xl">Explore Public Palettes</h1>
+          <h1 className="text-center text-3xl font-bold text-black sm:text-5xl md:text-6xl">Explore Public Palettes</h1>
           <p className="text-center text-muted-foreground md:max-w-[60%]">
             Discover inspiring color combinations contributed by our community. Explore endless possibilities with Hue
             Harbor&apos;s public palettes.
@@ -52,7 +52,7 @@ export default function PublicPalettes() {
                 return true
               })
               .map((palette) => (
-                <Palette key={palette.id} palette={palette} />
+                <Palette key={palette.id} palette={palette} className="border-gray-100 bg-white text-black" />
               ))}
           </div>
         </Container>

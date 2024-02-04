@@ -58,9 +58,9 @@ export default async function LandingPage() {
   const session = await getServerAuthSession()
 
   return (
-    <div>
+    <div className="bg-white">
       <Navbar />
-      <section className="h-screen w-full bg-gray-100 py-12 dark:bg-gray-800 md:py-24 lg:py-32">
+      <section className="py-12md:py-24 h-screen w-full bg-gray-100 text-black lg:py-32">
         <div className="flex h-full w-full items-center justify-center">
           <div className="container grid h-full w-full md:grid-cols-2">
             <div className="flex flex-col justify-center gap-4 md:max-w-[90%]">
@@ -71,7 +71,7 @@ export default async function LandingPage() {
               </p>
               <Link
                 href={session?.user ? '/app' : '/auth/login'}
-                className="w-max rounded-md bg-foreground px-4 py-2 text-white"
+                className="w-max rounded-md bg-black px-4 py-2 text-white"
               >
                 Create Your Palette
               </Link>
@@ -88,8 +88,8 @@ export default async function LandingPage() {
       </section>
 
       {/* About Us */}
-      <section className="border-b">
-        <div className="container grid md:grid-cols-2">
+      <section className="border-b border-b-gray-100">
+        <div className="container grid text-black md:grid-cols-2">
           <div className="hidden h-full md:block">
             <Image
               src="/about.jpg"
@@ -107,7 +107,7 @@ export default async function LandingPage() {
               palettes seamlessly. Join our community and bring your projects to life with vibrant colors and effortless
               creativity.
             </p>
-            <Link href="/public/palettes" className="w-max rounded-md bg-foreground px-4 py-2 text-white">
+            <Link href="/public/palettes" className="w-max rounded-md bg-black px-4 py-2 text-white">
               Explore Palettes
             </Link>
           </div>
@@ -117,7 +117,10 @@ export default async function LandingPage() {
       {/* Features  */}
       <section className="container grid gap-4 py-20 md:grid-cols-3">
         {FEATURES.map((feature, i) => (
-          <div key={i} className="flex flex-col items-center justify-center gap-4 rounded-md border p-4 shadow">
+          <div
+            key={i}
+            className="flex flex-col items-center justify-center gap-4 rounded-md border border-gray-100 p-4 text-black shadow"
+          >
             <div className="flex items-center justify-center rounded-md bg-primary p-4">
               {cloneElement(feature.icon, { className: 'text-white' })}
             </div>
@@ -130,18 +133,18 @@ export default async function LandingPage() {
       <section className="mx-auto flex max-w-screen-sm flex-col items-center justify-center gap-4 px-10 py-20">
         {STEPS.map((step, i) => (
           <>
-            <div className="rounded-md border px-4 py-2">
+            <div className="rounded-md border px-4 py-2 text-black">
               <h1 className="mb-2 text-2xl font-bold">
                 {i + 1}. {step.title}
               </h1>
               <p>{step.content}</p>
             </div>
-            {i < STEPS.length - 1 ? <div className="h-10 w-[1px] bg-gray-500" /> : null}
+            {i < STEPS.length - 1 ? <div className="h-10 w-[1px] bg-gray-300" /> : null}
           </>
         ))}
       </section>
 
-      <footer className="border-t">
+      <footer className="border-t border-t-gray-100 text-black">
         <div className="container flex items-center justify-between p-4">
           <div>&copy; 2024 Rohit Saini</div>
 

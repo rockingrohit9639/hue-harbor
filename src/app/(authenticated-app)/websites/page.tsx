@@ -23,7 +23,7 @@ export default function Websites() {
 
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 5 }, (_, i) => (
-            <div key={i} className="h-40 w-full animate-pulse rounded-md bg-card" />
+            <div key={i} className="h-40 w-full animate-pulse rounded-md bg-gray-100 dark:bg-card" />
           ))}
         </div>
       </Container>

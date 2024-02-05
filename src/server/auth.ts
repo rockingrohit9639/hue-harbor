@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/login',
   },
+  secret: env.NEXTAUTH_SECRET,
 }
 
 export const getServerAuthSession = () => getServerSession(authOptions)

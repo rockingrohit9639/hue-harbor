@@ -26,17 +26,17 @@ export const ROUTES = [
     icon: <HomeIcon />,
   },
   {
-    path: '/websites',
+    path: '/app/websites',
     label: 'My Websites',
     icon: <GlobeIcon />,
   },
   {
-    path: '/palettes',
+    path: '/app/palettes',
     label: 'My Palettes',
     icon: <SwatchBookIcon />,
   },
   {
-    path: '/api-keys',
+    path: '/app/api-keys',
     label: 'My API Keys',
     icon: <Key />,
   },
@@ -101,8 +101,8 @@ export function Sidebar({ className, ...restProps }: SidebarProps) {
             <DropdownMenuContent>
               <DropdownMenuLabel>{userData?.email}</DropdownMenuLabel>
 
-              <DropdownMenuItem className="cursor-pointer" asChild>
-                <Link href="/profile">Profile</Link>
+              <DropdownMenuItem disabled className="cursor-pointer" asChild>
+                <Link href="/app/profile">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer"

@@ -12,7 +12,7 @@ export default function PublicPalettes() {
 
   return match(palettesQuery)
     .with({ status: 'loading' }, () => (
-      <div className="container">
+      <div className="container min-h-screen">
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 5 }, (_, i) => (
             <div key={i} className="h-40 w-full animate-pulse rounded-md bg-gray-100 dark:bg-card" />
@@ -21,7 +21,7 @@ export default function PublicPalettes() {
       </div>
     ))
     .with({ status: 'error' }, ({ error }) => (
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-full min-h-screen w-full items-center justify-center">
         <ErrorMessage title={error?.message} />
       </div>
     ))

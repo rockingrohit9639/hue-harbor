@@ -34,6 +34,7 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login',
   },
   secret: env.NEXTAUTH_SECRET,
+  debug: true,
 }
 
 export const getServerAuthSession = () => getServerSession(authOptions)

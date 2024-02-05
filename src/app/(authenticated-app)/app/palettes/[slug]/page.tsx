@@ -14,7 +14,7 @@ import { Switch } from '~/components/ui/switch'
 import { Label } from '~/components/ui/label'
 import EditableInput from '~/components/ui/editable-input'
 import { Button } from '~/components/ui/button'
-import { cn } from '~/lib/utils'
+import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { usePaletteStore } from '~/stores'
 import ColorPicker from '~/components/color-picker'
 import { variableSchema } from '~/schema/palette'
@@ -22,6 +22,7 @@ import AddVariableDialog from '../_components/add-variable-dialog'
 import Builder from '../_components/builder'
 import VariableProperties from '../_components/variable-properties'
 import useUnsavedChanges from '~/hooks/use-unsaved-changes'
+import UsagePopover from '~/components/usage-popover'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -104,6 +105,8 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
             </div>
 
             <div className="flex items-center gap-4">
+              <UsagePopover slug={params.slug} cdnContent={getPaletteCdnContent(params.slug)} />
+
               <div className={cn('flex items-center space-x-2 opacity-50', { 'opacity-100': isUpdateAllowed })}>
                 <Label htmlFor="visibility" className="!text-sm">
                   PRIVATE

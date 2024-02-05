@@ -1,7 +1,8 @@
 import { Palette as PrismaPalette } from '@prisma/client'
 import Link from 'next/link'
 import ErrorMessage from '~/components/ui/error-message'
-import { cn } from '~/lib/utils'
+import UsagePopover from '~/components/usage-popover'
+import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { variablesSchema } from '~/schema/palette'
 
 type PaletteProps = {
@@ -38,7 +39,11 @@ export default function Palette({ className, style, palette, blockNavigation }: 
       style={style}
       href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}
     >
-      <h1 className="px-4 py-2 text-lg font-bold">{palette.name}</h1>
+      <div className="flex items-center justify-between gap-2 px-4 py-2">
+        <h1 className="text-lg font-bold">{palette.name}</h1>
+
+        <UsagePopover slug={palette.slug} cdnContent={getPaletteCdnContent(palette.slug)} />
+      </div>
 
       {colorVariables.map((variable) => (
         <div

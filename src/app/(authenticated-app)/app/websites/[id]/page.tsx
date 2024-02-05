@@ -14,7 +14,8 @@ import { Input } from '~/components/ui/input'
 import Loader from '~/components/ui/loader'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
 import { Textarea } from '~/components/ui/textarea'
-import { cn } from '~/lib/utils'
+import UsagePopover from '~/components/usage-popover'
+import { cn, getWebsiteCdnContent } from '~/lib/utils'
 import { UpdateWebsiteInput, updateWebsiteInput } from '~/server/api/routers/websites/websites.input'
 import { api } from '~/trpc/react'
 
@@ -69,7 +70,8 @@ export default function WebsiteDetails({ params }: { params: { id: string } }) {
             {!!website.description && <p className="truncate text-sm text-muted-foreground">{website.description}</p>}
           </div>
 
-          <div>
+          <div className="flex items-center gap-2">
+            <UsagePopover cdnContent={getWebsiteCdnContent(params.id)} />
             <Link href={website.url} target="_blank" className={cn(buttonVariants({ variant: 'outline' }))}>
               <ExternalLinkIcon className="h-4 w-4" />
             </Link>

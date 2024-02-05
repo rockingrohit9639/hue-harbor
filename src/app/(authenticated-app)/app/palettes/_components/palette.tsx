@@ -38,7 +38,7 @@ export default function Palette({ className, style, palette, blockNavigation }: 
 
   return (
     <Link className={cn(className)} style={style} href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}>
-      <div className="group relative flex h-72 flex-col overflow-hidden rounded-md border-[0.5px]">
+      <div className="group relative flex h-72 flex-col overflow-hidden rounded-xl border-[0.5px]">
         <div className="absolute bottom-0 left-0 w-full translate-y-full bg-background px-4 py-2 transition-all ease-in-out group-hover:translate-y-0">
           {palette.name}
         </div>

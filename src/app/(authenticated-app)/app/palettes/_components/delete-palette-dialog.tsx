@@ -28,7 +28,7 @@ export default function DeletePaletteDialog({ className, style, id, visibility }
     },
     onSuccess: () => {
       toast.success('Palette removed successfully!')
-      router.replace('/palettes')
+      router.replace('/app/palettes')
     },
   })
 

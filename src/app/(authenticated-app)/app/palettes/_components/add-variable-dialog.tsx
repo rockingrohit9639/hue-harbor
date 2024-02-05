@@ -1,6 +1,6 @@
 'use client'
 
-import { Variable } from 'lucide-react'
+import { VariableIcon } from 'lucide-react'
 import { cloneElement, useState } from 'react'
 import { match } from 'ts-pattern'
 import { nanoid } from 'nanoid'
@@ -15,7 +15,7 @@ import {
 } from '~/components/ui/dialog'
 import { VARIABLES } from '~/lib/palette'
 import { cn } from '~/lib/utils'
-import { VariableType } from '~/schema/palette'
+import { Variable, VariableType } from '~/schema/palette'
 import { usePaletteStore } from '~/stores'
 
 type AddVariableDialogProps = {
@@ -27,31 +27,31 @@ type AddVariableDialogProps = {
 export default function AddVariableDialog({ className, style, triggerProps }: AddVariableDialogProps) {
   const [open, setOpen] = useState(false)
   const addVariable = usePaletteStore((store) => store.addVariable)
+  const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
 
   function handleAddNewVariable(type: VariableType) {
     const id = nanoid()
 
     /** Using ts-pattern here will be helpful in case if we add more variable types */
-    match(type)
-      .with('color', () => {
-        addVariable({
-          id,
-          name: 'My number Variable',
-          identifier: '--my-color-variable',
-          type: 'color',
-          value: '#000000',
-        })
-      })
-      .with('number', () => {
-        addVariable({
-          id,
-          name: 'My number variable',
-          identifier: '--my-number-variable',
-          type: 'number',
-          value: 0,
-        })
-      })
+    const variable: Variable = match(type)
+      .with('color', () => ({
+        id,
+        name: 'My Color Variable',
+        identifier: '--my-color-variable',
+        type: 'color' as const,
+        value: '#000000',
+      }))
+      .with('number', () => ({
+        id,
+        name: 'My number variable',
+        identifier: '--my-number-variable',
+        type: 'number' as const,
+        value: 0,
+      }))
       .exhaustive()
+
+    addVariable(variable)
+    setActiveVariable(variable)
 
     setOpen(false)
   }
@@ -59,7 +59,7 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button icon={<Variable />} {...triggerProps}>
+        <Button icon={<VariableIcon />} {...triggerProps}>
           Add variable
         </Button>
       </DialogTrigger>

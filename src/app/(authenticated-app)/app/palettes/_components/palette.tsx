@@ -26,7 +26,7 @@ export default function Palette({ className, style, palette, blockNavigation }: 
       <Link
         className={cn('flex h-40 w-full items-center justify-center rounded-md border text-3xl font-bold', className)}
         style={{ ...style, backgroundColor: palette.backgroundColor ?? undefined }}
-        href={`/palettes/${palette.slug}`}
+        href={`/app/palettes/${palette.slug}`}
       >
         {palette.name}
       </Link>

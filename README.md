@@ -1,28 +1,131 @@
-# Create T3 App
+# Hue Harbor 🎨
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Hue Harbor is a versatile color palette management platform designed to streamline the process of creating, customizing, and integrating color palettes into your projects. Whether you're a designer, developer, or creative enthusiast, Hue Harbor provides the tools you need to bring your projects to life with vibrant colors and effortless creativity.
 
-## What's next? How do I make an app with this?
+## Features 🚀
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- **Create Custom Color Palettes**: Easily create personalized color palettes using our intuitive interface and advanced color tools.
+- **Manage Your Palettes**: Organize, edit, and customize your color palettes with ease, ensuring consistency across your projects.
+- **Explore Public Palettes**: Discover a curated collection of inspiring color combinations contributed by our creative community.
+- **Seamless Integration**: Integrate your palettes into your projects effortlessly using our provided CDN or APIs.
+- **Collaborate with Ease**: Share your palettes with team members or clients and collaborate on projects in real-time.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Usage
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### Using CDN
 
-## Learn More
+To use your palettes in your projects using CDN you can use any one of the following methods.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+1. Using website id
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+- Make sure you have website id with you, then include the following tag inside <head> of your html document
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```html
+<link rel="stylesheet" href="https://hue-harbor.imrohitsaini.in/api/cdn/website/<YOUR-WEBSITE-ID>" />
+```
 
-## How do I deploy this?
+2. Using palette slug
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+- Make sure you have slug of your palette with you. Then add the following html
+
+```html
+<link rel="stylesheet" href="https://hue-harbor.imrohitsaini.in/api/cdn/palette/<YOUR-PALETTE-SLUG>" />
+```
+
+\*_**Note**_ You can use CDN for PUBLIC palettes only
+
+### Using APIs
+
+We have created few APIs to meet your needs. If you are using any framework which supports hooks then you can create a hook like below in your project and can use accordingly.
+
+```ts
+import { useCallback, useEffect, useState } from 'react'
+
+type UseHueHarborProps = {
+  apiKey: string // you can create and get API key from your dashboard
+  paletteSlug: string
+}
+
+/**
+ * This hook will fetch and insert all css variables from a palette
+ * into your DOM :root
+ */
+type Response = {
+  message: string
+  data: Array<{ variableName: string; value: string }>
+}
+
+export default function useHueHarbor({ apiKey, paletteSlug }: UseHueHarborProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [variables, setVariables] = useState<Response['data']>([])
+
+  const fetchAndUpdateCSS = useCallback(() => {
+    setIsLoading(true)
+    fetch(`https://hue-harbor.imrohitsaini.in/api/cdn/raw/${paletteSlug}`, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res: Response) => {
+        res.data.forEach((variable) => {
+          document.body.style.setProperty(variable.variableName, variable.value)
+        })
+
+        setVariables(res.data)
+      })
+      .catch(() => {
+        setError('Something went wrong!')
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [apiKey, paletteSlug])
+
+  useEffect(
+    function fetchVariables() {
+      fetchAndUpdateCSS()
+    },
+    [fetchAndUpdateCSS],
+  )
+
+  return {
+    isLoading,
+    error,
+    variables,
+  }
+}
+```
+
+## Getting Started 🌟
+
+To get started with Hue Harbor, follow these simple steps:
+
+1. **Sign Up**: Create your account at [Hue Harbor](hue-harbor.imrohitsaini.in/auth/login).
+2. **Explore Public Palettes**: Browse through our curated collection of public palettes for inspiration.
+3. **Create Your Palette**: Use our intuitive tools to create your custom color palette or import existing ones.
+4. **Integrate with Your Projects**: Easily integrate your palettes into your websites, apps, or designs using our provided CDN or APIs.
+
+## Installation 💻
+
+To install Hue Harbor locally, follow these steps:
+
+1. Clone the repository: `https://github.com/rockingrohit9639/hue-harbor`
+2. Navigate to the project directory: `cd hue-harbor`
+3. Install dependencies: `pnpm install`
+4. Add required environment variables
+5. Start the development server: `pnpm dev`
+
+## Contributing 🤝
+
+We welcome contributions from the community! If you'd like to contribute to Hue Harbor, please follow these guidelines:
+
+1. Fork the repository and create your branch: `git checkout -b feature/new-feature`
+2. Commit your changes: `git commit -am 'Add new feature'`
+3. Push to the branch: `git push origin feature/new-feature`
+4. Submit a pull request with your changes.
+
+## License 📄
+
+This project is licensed under the [MIT License](LICENSE).

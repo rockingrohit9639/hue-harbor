@@ -6,5 +6,10 @@ export async function validateUserWithApi(apiKey: string) {
     return null
   }
 
+  await db.apiKey.update({
+    where: { id: key.id },
+    data: { usage: { increment: 1 } },
+  })
+
   return key.createdBy
 }

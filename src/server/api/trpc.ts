@@ -62,6 +62,13 @@ export const apiKeyProtectedProcedure = t.procedure.use(async ({ ctx, next }) =>
     throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid API key found!' })
   }
 
+  await db.apiKey.update({
+    where: { id: apiKeyFound.id },
+    data: {
+      usage: { increment: 1 },
+    },
+  })
+
   return next({
     ctx: {
       session: { user: apiKeyFound.createdBy },

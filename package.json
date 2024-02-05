@@ -38,6 +38,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "color": "^4.2.3",
+    "dayjs": "^1.11.10",
     "lucide-react": "^0.316.0",
     "nanoid": "^5.0.4",
     "next": "^14.0.4",

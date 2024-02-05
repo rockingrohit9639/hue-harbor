@@ -1,9 +1,12 @@
 import { Palette as PrismaPalette } from '@prisma/client'
 import Link from 'next/link'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import ErrorMessage from '~/components/ui/error-message'
 import UsagePopover from '~/components/usage-popover'
 import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { variablesSchema } from '~/schema/palette'
+dayjs.extend(relativeTime)
 
 type PaletteProps = {
   className?: string
@@ -34,24 +37,22 @@ export default function Palette({ className, style, palette, blockNavigation }: 
   }
 
   return (
-    <Link
-      className={cn('relative flex h-52 w-full flex-col overflow-hidden rounded-md border', className)}
-      style={style}
-      href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}
-    >
-      <div className="flex items-center justify-between gap-2 px-4 py-2">
-        <h1 className="text-lg font-bold">{palette.name}</h1>
+    <Link className={cn(className)} style={style} href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}>
+      <div className="group relative flex h-72 flex-col overflow-hidden rounded-md border-[0.5px]">
+        <div className="absolute bottom-0 left-0 w-full translate-y-full bg-background px-4 py-2 transition-all ease-in-out group-hover:translate-y-0">
+          {palette.name}
+        </div>
 
-        <UsagePopover slug={palette.slug} cdnContent={getPaletteCdnContent(palette.slug)} />
+        {colorVariables.map((variable) => (
+          <div key={variable.id} className="flex-1" style={{ backgroundColor: String(variable.value) }} />
+        ))}
       </div>
 
-      {colorVariables.map((variable) => (
-        <div
-          key={variable.id}
-          className="h-full flex-1 transition-all hover:flex-[2]"
-          style={{ backgroundColor: String(variable.value) }}
-        />
-      ))}
+      <div className="mt-2 flex items-center justify-between">
+        <UsagePopover cdnContent={getPaletteCdnContent(palette.slug)} slug={palette.slug} />
+
+        <p className="text-xs text-muted-foreground">{dayjs(palette.createdAt).fromNow()}</p>
+      </div>
     </Link>
   )
 }

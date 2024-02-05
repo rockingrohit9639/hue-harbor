@@ -47,7 +47,11 @@ export default function Websites() {
 
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {websites.map((website) => (
-            <Link key={website.id} className="space-y-2 rounded-md border bg-card p-4" href={`/websites/${website.id}`}>
+            <Link
+              key={website.id}
+              className="space-y-2 rounded-md border bg-card p-4"
+              href={`/app/websites/${website.id}`}
+            >
               <h1 className="text-xl font-bold">{website.name}</h1>
               {!!website.description && <p className="text-sm text-muted-foreground">{website.description}</p>}
 

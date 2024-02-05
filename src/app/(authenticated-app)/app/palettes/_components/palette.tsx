@@ -8,9 +8,10 @@ type PaletteProps = {
   className?: string
   style?: React.CSSProperties
   palette: PrismaPalette
+  blockNavigation?: boolean
 }
 
-export default function Palette({ className, style, palette }: PaletteProps) {
+export default function Palette({ className, style, palette, blockNavigation }: PaletteProps) {
   const variablesResult = variablesSchema.safeParse(palette.variables)
 
   if (!variablesResult.success) {
@@ -35,7 +36,7 @@ export default function Palette({ className, style, palette }: PaletteProps) {
     <Link
       className={cn('relative flex h-52 w-full flex-col overflow-hidden rounded-md border', className)}
       style={style}
-      href={`/palettes/${palette.slug}`}
+      href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}
     >
       <h1 className="px-4 py-2 text-lg font-bold">{palette.name}</h1>
 

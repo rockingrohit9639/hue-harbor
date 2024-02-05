@@ -12,11 +12,15 @@ export default function PublicPalettes() {
 
   return match(palettesQuery)
     .with({ status: 'loading' }, () => (
-      <div className="container min-h-screen">
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-          {Array.from({ length: 5 }, (_, i) => (
-            <div key={i} className="h-40 w-full animate-pulse rounded-md bg-gray-100 dark:bg-card" />
-          ))}
+      <div className="min-h-screen ">
+        <div className="h-64 w-full animate-pulse bg-gray-100" />
+
+        <div className="container p-4">
+          <div className="grid gap-4 p-4 sm:grid-cols-2 md:grid-cols-3">
+            {Array.from({ length: 5 }, (_, i) => (
+              <div key={i} className="h-40 w-full animate-pulse rounded-md bg-gray-100" />
+            ))}
+          </div>
         </div>
       </div>
     ))
@@ -35,26 +39,29 @@ export default function PublicPalettes() {
           </p>
         </div>
 
-        <Container className="p-0">
-          <div className="grid gap-4 p-4 sm:grid-cols-2 md:grid-cols-3">
-            {data
-              .filter((palette) => {
-                const result = variablesSchema.safeParse(palette.variables)
-                if (!result.success) {
-                  return false
-                }
+        <Container className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          {data
+            .filter((palette) => {
+              const result = variablesSchema.safeParse(palette.variables)
+              if (!result.success) {
+                return false
+              }
 
-                const colorVariables = result.data.filter((variable) => variable.type === 'color')
-                if (colorVariables.length === 0) {
-                  return false
-                }
+              const colorVariables = result.data.filter((variable) => variable.type === 'color')
+              if (colorVariables.length === 0) {
+                return false
+              }
 
-                return true
-              })
-              .map((palette) => (
-                <Palette key={palette.id} palette={palette} className="border-gray-100 bg-white text-black" />
-              ))}
-          </div>
+              return true
+            })
+            .map((palette) => (
+              <Palette
+                key={palette.id}
+                palette={palette}
+                blockNavigation
+                className="border-gray-100 bg-white text-black"
+              />
+            ))}
         </Container>
       </div>
     ))

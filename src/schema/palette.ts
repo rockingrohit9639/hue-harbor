@@ -3,7 +3,7 @@ import { z } from 'zod'
 const basicVariableSchema = z.object({
   id: z.string(),
   name: z.string(),
-  identifier: z.string(),
+  identifier: z.string().startsWith('--', 'Please enter a valid css variable identifier!'),
 })
 export const variableSchema = z.discriminatedUnion('type', [
   basicVariableSchema.extend({

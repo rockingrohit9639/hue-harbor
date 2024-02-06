@@ -51,7 +51,7 @@ const BASIC_PROPERTIES: Property[] = [
   {
     type: 'text',
     id: 'identifier',
-    title: 'Identifier',
+    title: 'CSS Identifier',
   },
 ]
 

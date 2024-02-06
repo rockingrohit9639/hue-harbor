@@ -73,7 +73,9 @@ export default function ColorPicker({
             className="w-full border-none outline-none"
             color={color}
             onChange={(hex) => {
-              setColor(colord(hex).toRgbString())
+              const newColor = colord(hex).toRgbString()
+              setColor(newColor)
+              onChange?.(newColor)
             }}
           />
         </div>

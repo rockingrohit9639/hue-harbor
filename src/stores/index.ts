@@ -18,6 +18,7 @@ type PaletteStore = {
   activeVariable?: Variable
   setActiveVariable: (variable: Variable | undefined) => void
   updateVariable: (id: string, properties: Variable) => void
+  removeVariable: (id: string) => void
 }
 
 export const usePaletteStore = create<PaletteStore>((set) => ({
@@ -74,6 +75,12 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
 
         return variable
       }),
+    }))
+  },
+  removeVariable: (id) => {
+    set((prev) => ({
+      ...prev,
+      variables: prev.variables.filter((variable) => variable.id !== id),
     }))
   },
 }))

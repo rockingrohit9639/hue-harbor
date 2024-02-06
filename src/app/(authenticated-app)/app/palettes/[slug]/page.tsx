@@ -160,7 +160,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
               <p className="mb-2 text-sm text-muted-foreground">Background Color</p>
               <ColorPicker
                 disabled={!isUpdateAllowed}
-                value={paletteData?.backgroundColor}
+                color={paletteData?.backgroundColor}
                 onChange={(color) => {
                   setPaletteData({ backgroundColor: color })
                 }}

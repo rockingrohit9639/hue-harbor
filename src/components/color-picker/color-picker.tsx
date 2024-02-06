@@ -1,10 +1,13 @@
-import { cloneElement, useState } from 'react'
-import BestColorPicker from 'react-best-gradient-color-picker'
+import { cloneElement, useEffect, useState } from 'react'
 import { PopoverContentProps } from '@radix-ui/react-popover'
+import { RgbaStringColorPicker, HexColorInput } from 'react-colorful'
+import { colord, extend } from 'colord'
+import namesPlugin from 'colord/plugins/names'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { cn } from '~/lib/utils'
+extend([namesPlugin])
 
-type ColorPickerProps = React.ComponentProps<typeof BestColorPicker> & {
+type ColorPickerProps = React.ComponentProps<typeof RgbaStringColorPicker> & {
   className?: string
   style?: React.CSSProperties
   trigger?: React.ReactElement
@@ -17,19 +20,28 @@ export default function ColorPicker({
   className,
   style,
   trigger,
-  value,
+  color: incomingColor,
   onChange,
   disabled,
   align,
   side,
   ...pickerProps
 }: ColorPickerProps) {
-  const [color, setColor] = useState(value)
+  const [color, setColor] = useState('rgba(0,0,0,1)')
 
-  function handleColorChange(color: string) {
-    setColor(color)
-    onChange(color)
+  function handleColorChange(updatedColor: string) {
+    setColor(updatedColor)
+    onChange?.(color)
   }
+
+  useEffect(
+    function updateColorWhenIncomingChanges() {
+      if (typeof incomingColor === 'string') {
+        setColor(incomingColor.startsWith('rgba') ? incomingColor : colord(incomingColor).toRgbString())
+      }
+    },
+    [incomingColor],
+  )
 
   return (
     <Popover>
@@ -53,15 +65,18 @@ export default function ColorPicker({
       </PopoverTrigger>
 
       <PopoverContent className="w-full bg-card" align={align} side={side}>
-        <BestColorPicker
-          value={color}
-          onChange={handleColorChange}
-          {...pickerProps}
-          hideInputType
-          hideColorTypeBtns
-          hideAdvancedSliders
-          hideColorGuide
-        />
+        <RgbaStringColorPicker className="!w-full" color={color} {...pickerProps} onChange={handleColorChange} />
+
+        <div className="mt-2 flex items-center gap-2 rounded-md border px-4 py-2">
+          <div className="text-muted-foreground">#</div>
+          <HexColorInput
+            className="w-full border-none outline-none"
+            color={color}
+            onChange={(hex) => {
+              setColor(colord(hex).toRgbString())
+            }}
+          />
+        </div>
       </PopoverContent>
     </Popover>
   )

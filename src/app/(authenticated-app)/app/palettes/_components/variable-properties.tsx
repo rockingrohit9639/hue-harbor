@@ -29,7 +29,7 @@ export default function VariableProperties({ className, style }: VariablePropert
   })
 
   useEffect(
-    function updatePropertiesWhenFieldChange() {
+    function updatePropertiesWhenVariableChange() {
       form.reset(activeVariable)
     },
     [activeVariable, form],

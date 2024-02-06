@@ -1,5 +1,6 @@
-import { PackageOpen } from 'lucide-react'
+import { PackageOpen, Trash2 } from 'lucide-react'
 import { match } from 'ts-pattern'
+import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 import { Variable } from '~/schema/palette'
 import { usePaletteStore } from '~/stores'
@@ -14,6 +15,7 @@ export default function Builder({ className, style }: BuilderProps) {
   const isUpdateAllowed = usePaletteStore((store) => store.isUpdateAllowed)
   const activeVariable = usePaletteStore((store) => store.activeVariable)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
+  const removeVariable = usePaletteStore((store) => store.removeVariable)
 
   if (!variables.length) {
     return (
@@ -33,10 +35,13 @@ export default function Builder({ className, style }: BuilderProps) {
       {variables.map((variable) => (
         <div
           key={variable.id}
-          className={cn('flex w-full cursor-pointer rounded-md border bg-card', {
-            'border-2 border-gray-500': variable.id === activeVariable?.id,
+          className={cn('flex w-full cursor-pointer rounded-md border-2 border-border bg-card', {
+            'border-gray-400': variable.id === activeVariable?.id,
+            'pointer-events-none': !isUpdateAllowed,
           })}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
+
             if (isUpdateAllowed) {
               setActiveVariable(variable)
             }
@@ -46,8 +51,16 @@ export default function Builder({ className, style }: BuilderProps) {
             <h1 className="text-lg font-bold">{variable.name}</h1>
             <p className="text-sm text-muted-foreground">{variable.identifier}</p>
           </div>
-          <div className="flex items-center justify-center border-l px-4 py-2">
+          <div className="flex items-center justify-center gap-4 border-l px-4 py-2">
             <VariablePreview variable={variable} />
+            <Button
+              icon={<Trash2 />}
+              variant="destructive-outline"
+              size="icon-sm"
+              onClick={() => {
+                removeVariable(variable.id)
+              }}
+            />
           </div>
         </div>
       ))}

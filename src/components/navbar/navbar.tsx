@@ -3,14 +3,16 @@
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import ThemeToggler from '~/app/(authenticated-app)/app/_components/theme-toggler'
 import { cn } from '~/lib/utils'
 
 type NavbarProps = {
   className?: string
   style?: React.CSSProperties
+  showThemeToggler?: boolean
 }
 
-export default function Navbar({ className, style }: NavbarProps) {
+export default function Navbar({ className, style, showThemeToggler }: NavbarProps) {
   const { data } = useSession()
 
   return (
@@ -27,6 +29,7 @@ export default function Navbar({ className, style }: NavbarProps) {
           <h1 className="text-xl font-bold">Hue Harbor</h1>
         </Link>
         <div className="flex items-center gap-4">
+          {!!showThemeToggler && <ThemeToggler />}
           {data?.user ? <Link href="/app">Dashboard</Link> : <Link href="/auth/login">Login</Link>}
         </div>
       </div>

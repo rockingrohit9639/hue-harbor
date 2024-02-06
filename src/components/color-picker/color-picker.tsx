@@ -70,7 +70,7 @@ export default function ColorPicker({
         <div className="mt-2 flex items-center gap-2 rounded-md border px-4 py-2">
           <div className="text-muted-foreground">#</div>
           <HexColorInput
-            className="w-full border-none outline-none"
+            className="w-full border-none bg-transparent outline-none"
             color={color}
             onChange={(hex) => {
               const newColor = colord(hex).toRgbString()

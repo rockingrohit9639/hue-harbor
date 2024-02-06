@@ -1,5 +1,6 @@
 import { cloneElement, useState } from 'react'
 import BestColorPicker from 'react-best-gradient-color-picker'
+import { PopoverContentProps } from '@radix-ui/react-popover'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { cn } from '~/lib/utils'
 
@@ -8,6 +9,8 @@ type ColorPickerProps = React.ComponentProps<typeof BestColorPicker> & {
   style?: React.CSSProperties
   trigger?: React.ReactElement
   disabled?: boolean
+  align?: PopoverContentProps['align']
+  side?: PopoverContentProps['side']
 }
 
 export default function ColorPicker({
@@ -17,6 +20,8 @@ export default function ColorPicker({
   value,
   onChange,
   disabled,
+  align,
+  side,
   ...pickerProps
 }: ColorPickerProps) {
   const [color, setColor] = useState(value)
@@ -47,7 +52,7 @@ export default function ColorPicker({
         )}
       </PopoverTrigger>
 
-      <PopoverContent className="w-full bg-card">
+      <PopoverContent className="w-full bg-card" align={align} side={side}>
         <BestColorPicker
           value={color}
           onChange={handleColorChange}

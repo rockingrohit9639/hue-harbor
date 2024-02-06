@@ -18,7 +18,7 @@ export default function PropertyInput({ className, style, property }: PropertyIn
       <Input className={className} style={style} placeholder={property.placeholder ?? property.title} {...field} />
     ))
     .with({ type: 'color' }, () => (
-      <ColorPicker className={className} style={style} value={field.value} onChange={field.onChange} />
+      <ColorPicker className={className} style={style} value={field.value} onChange={field.onChange} side="left" />
     ))
     .with({ type: 'number' }, () => (
       <Input

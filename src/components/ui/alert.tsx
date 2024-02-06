@@ -70,7 +70,9 @@ export default function Alert({
 
         <AlertDialogFooter>
           <AlertDialogCancel {...cancelButtonProps} onClick={onCancel} asChild>
-            <Button loading={loading}>{cancelText}</Button>
+            <Button className="text-accent-foreground" loading={loading}>
+              {cancelText}
+            </Button>
           </AlertDialogCancel>
           <AlertDialogAction
             className="bg-destructive hover:bg-destructive/80"

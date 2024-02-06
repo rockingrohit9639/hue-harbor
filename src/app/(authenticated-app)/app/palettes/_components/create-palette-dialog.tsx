@@ -100,7 +100,7 @@ export default function CreatePaletteDialog({ className, style }: CreatePaletteD
                 <FormItem>
                   <FormLabel>BG Color (optional)</FormLabel>
                   <FormControl>
-                    <ColorPicker {...field} />
+                    <ColorPicker {...field} side="right" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

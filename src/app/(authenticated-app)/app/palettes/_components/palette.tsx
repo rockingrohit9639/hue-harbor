@@ -37,22 +37,23 @@ export default function Palette({ className, style, palette, blockNavigation }: 
   }
 
   return (
-    <Link className={cn(className)} style={style} href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}>
-      <div className="group relative flex h-72 flex-col overflow-hidden rounded-xl border-[0.5px]">
-        <div className="absolute bottom-0 left-0 w-full translate-y-full bg-background px-4 py-2 transition-all ease-in-out group-hover:translate-y-0">
-          {palette.name}
+    <div className={cn(className)} style={style}>
+      <Link href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}>
+        <div className="group relative flex h-72 flex-col overflow-hidden rounded-xl border-[0.5px]">
+          <div className="absolute bottom-0 left-0 w-full translate-y-full bg-background px-4 py-2 transition-all ease-in-out group-hover:translate-y-0">
+            {palette.name}
+          </div>
+          {colorVariables.map((variable) => (
+            <div key={variable.id} className="flex-1" style={{ backgroundColor: String(variable.value) }} />
+          ))}
         </div>
-
-        {colorVariables.map((variable) => (
-          <div key={variable.id} className="flex-1" style={{ backgroundColor: String(variable.value) }} />
-        ))}
-      </div>
+      </Link>
 
       <div className="mt-2 flex items-center justify-between">
         <UsagePopover cdnContent={getPaletteCdnContent(palette.slug)} slug={palette.slug} />
 
         <p className="text-xs text-muted-foreground">{dayjs(palette.createdAt).fromNow()}</p>
       </div>
-    </Link>
+    </div>
   )
 }

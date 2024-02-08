@@ -11,6 +11,9 @@ type PaletteStore = {
   variables: Variable[]
   updateBasicData: (palette: { name?: string; visibility?: Visibility; backgroundColor?: string }) => void
 
+  isAddVariableOpen: boolean
+  setAddVariableOpen: (isOpen: boolean) => void
+
   /** Variables */
   updateVariables: (variables: Variable[]) => void
   addVariable: (variable: Variable) => void
@@ -39,6 +42,14 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
         ...prev.basicData,
         ...data,
       },
+    }))
+  },
+
+  isAddVariableOpen: false,
+  setAddVariableOpen: (isOpen) => {
+    set((prev) => ({
+      ...prev,
+      isAddVariableOpen: isOpen,
     }))
   },
 

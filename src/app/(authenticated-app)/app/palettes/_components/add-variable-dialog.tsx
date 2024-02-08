@@ -1,7 +1,7 @@
 'use client'
 
 import { VariableIcon } from 'lucide-react'
-import { cloneElement, useState } from 'react'
+import { cloneElement } from 'react'
 import { match } from 'ts-pattern'
 import { nanoid } from 'nanoid'
 import { BaseButtonProps, Button } from '~/components/ui/button'
@@ -25,7 +25,8 @@ type AddVariableDialogProps = {
 }
 
 export default function AddVariableDialog({ className, style, triggerProps }: AddVariableDialogProps) {
-  const [open, setOpen] = useState(false)
+  const open = usePaletteStore((store) => store.isAddVariableOpen)
+  const setOpen = usePaletteStore((store) => store.setAddVariableOpen)
   const addVariable = usePaletteStore((store) => store.addVariable)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
 

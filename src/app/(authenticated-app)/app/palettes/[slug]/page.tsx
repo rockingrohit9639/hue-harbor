@@ -23,6 +23,7 @@ import Builder from '../_components/builder'
 import VariableProperties from '../_components/variable-properties'
 import useUnsavedChanges from '~/hooks/use-unsaved-changes'
 import UsagePopover from '~/components/usage-popover'
+import PaletteBuilderCommands from '../_components/palette-builder-commands'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -171,6 +172,8 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
 
           <VariableProperties />
         </div>
+
+        {isUpdateAllowed && <PaletteBuilderCommands />}
       </div>
     ))
     .exhaustive()

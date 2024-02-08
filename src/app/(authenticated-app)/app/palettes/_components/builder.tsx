@@ -58,6 +58,7 @@ export default function Builder({ className, style }: BuilderProps) {
               variant="destructive-outline"
               size="icon-sm"
               onClick={() => {
+                setActiveVariable(undefined)
                 removeVariable(variable.id)
               }}
             />

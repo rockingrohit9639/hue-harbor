@@ -8,6 +8,7 @@ import {
   findPaletteById,
   findPaletteBySlug,
   findPublicPalettes,
+  getExplorerVariables,
   getPreDeletePaletteStats,
   updatePalette,
 } from './palettes.service'
@@ -36,4 +37,5 @@ export const palettesRouter = createTRPCRouter({
   duplicate: protectedProcedure
     .input(z.string())
     .mutation(({ input, ctx }) => duplicatePalette(input, ctx.db, ctx.session)),
+  explorer: protectedProcedure.query(({ ctx }) => getExplorerVariables(ctx.db, ctx.session)),
 })

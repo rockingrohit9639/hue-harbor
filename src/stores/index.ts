@@ -14,6 +14,9 @@ type PaletteStore = {
   isAddVariableOpen: boolean
   setAddVariableOpen: (isOpen: boolean) => void
 
+  isExplorerOpen: boolean
+  setExplorerOpen: (isOpen: boolean) => void
+
   /** Variables */
   updateVariables: (variables: Variable[]) => void
   addVariable: (variable: Variable) => void
@@ -50,6 +53,14 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
     set((prev) => ({
       ...prev,
       isAddVariableOpen: isOpen,
+    }))
+  },
+
+  isExplorerOpen: false,
+  setExplorerOpen: (isOpen) => {
+    set((prev) => ({
+      ...prev,
+      isExplorerOpen: isOpen,
     }))
   },
 

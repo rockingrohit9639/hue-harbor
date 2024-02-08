@@ -1,4 +1,4 @@
-import { PlusCircleIcon } from 'lucide-react'
+import { CompassIcon, PlusCircleIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import {
@@ -15,6 +15,7 @@ export default function PaletteBuilderCommands() {
   const [isOpen, setIsOpen] = useState(false)
 
   const setAddVariableOpen = usePaletteStore((store) => store.setAddVariableOpen)
+  const setExplorerOpen = usePaletteStore((store) => store.setExplorerOpen)
 
   useHotkeys('ctrl+k, meta+k', (e) => {
     e.preventDefault()
@@ -36,6 +37,16 @@ export default function PaletteBuilderCommands() {
           >
             <PlusCircleIcon className="mr-2 h-4 w-4" />
             <span>Add new variable</span>
+          </CommandItem>
+
+          <CommandItem
+            onSelect={() => {
+              setIsOpen(false)
+              setExplorerOpen(true)
+            }}
+          >
+            <CompassIcon className="mr-2 h-4 w-4" />
+            <span>Explore Variables</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>

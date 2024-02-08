@@ -20,3 +20,4 @@ export const variablesSchema = z.array(variableSchema)
 
 export type Variable = z.infer<typeof variableSchema>
 export type VariableType = Variable['type']
+export type GetVariableByType<T extends VariableType> = Extract<Variable, { type: T }>

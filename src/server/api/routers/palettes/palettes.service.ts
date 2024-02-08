@@ -2,7 +2,7 @@ import { PaletteVisibility, PrismaClient } from '@prisma/client'
 import { Session } from 'next-auth'
 import { TRPCError } from '@trpc/server'
 import { CreatePaletteInput, UpdatePaletteInput } from './palettes.input'
-import { variablesSchema } from '~/schema/palette'
+import { GetVariableByType, variablesSchema } from '~/schema/palette'
 
 export async function createPalette(input: CreatePaletteInput, prisma: PrismaClient, session: Session) {
   const existingPalette = await prisma.palette.findFirst({ where: { slug: input.slug } })
@@ -174,4 +174,40 @@ async function generateNextSlug(prevSlug: string, prisma: PrismaClient): Promise
   }
 
   return `${slugWithoutNumber}-${startCount}`
+}
+
+export async function getExplorerVariables(prisma: PrismaClient, session: Session) {
+  const allowedPalettes = await prisma.palette.findMany({
+    where: { OR: [{ visibility: 'PUBLIC' }, { createdById: session.user.id }] },
+  })
+
+  const userPalettes = allowedPalettes.filter((palette) => palette.createdById === session.user.id)
+  const communityPalettes = allowedPalettes.filter((palette) => palette.createdById !== session.user.id)
+
+  const userVariables = userPalettes
+    .flatMap((palette) => {
+      const variablesResult = variablesSchema.safeParse(palette.variables)
+      if (!variablesResult.success || variablesResult.data.length === 0) {
+        return null
+      }
+
+      return variablesResult.data
+    })
+    .filter(Boolean) as GetVariableByType<'color'>[]
+
+  const communityVariables = communityPalettes
+    .flatMap((palette) => {
+      const variablesResult = variablesSchema.safeParse(palette.variables)
+      if (!variablesResult.success || variablesResult.data.length === 0) {
+        return null
+      }
+
+      return variablesResult.data
+    })
+    .filter(Boolean) as GetVariableByType<'color'>[]
+
+  return {
+    user: userVariables.filter((variable) => variable.type === 'color'),
+    community: communityVariables.filter((variable) => variable.type === 'color'),
+  }
 }

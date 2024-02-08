@@ -2,6 +2,7 @@ import { PaletteVisibility, PrismaClient } from '@prisma/client'
 import { Session } from 'next-auth'
 import { TRPCError } from '@trpc/server'
 import { CreatePaletteInput, UpdatePaletteInput } from './palettes.input'
+import { variablesSchema } from '~/schema/palette'
 
 export async function createPalette(input: CreatePaletteInput, prisma: PrismaClient, session: Session) {
   const existingPalette = await prisma.palette.findFirst({ where: { slug: input.slug } })
@@ -123,4 +124,54 @@ export async function getPreDeletePaletteStats(id: string, prisma: PrismaClient,
 
 export async function findPublicPalettes(prisma: PrismaClient) {
   return prisma.palette.findMany({ where: { visibility: 'PUBLIC' } })
+}
+
+export async function duplicatePalette(id: string, prisma: PrismaClient, session: Session) {
+  const palette = await findPaletteById(id, prisma, session)
+
+  if (palette.createdById === session.user.id) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'You cannot duplicate your own palette!',
+    })
+  }
+
+  const variables = variablesSchema.safeParse(palette.variables)
+  if (!variables.success) {
+    throw new TRPCError({
+      code: 'CONFLICT',
+      message: 'Palette is not properly configured yet!',
+    })
+  }
+
+  return prisma.palette.create({
+    data: {
+      name: `Copy ${palette.name}`,
+      slug: await generateNextSlug(palette.slug, prisma),
+      backgroundColor: palette.backgroundColor,
+      createdById: session.user.id,
+      variables: variables.data,
+    },
+  })
+}
+
+async function generateNextSlug(prevSlug: string, prisma: PrismaClient): Promise<string> {
+  const splittedSlug = prevSlug.split('-')
+  const slugWithoutNumber = Number.isNaN(Number(splittedSlug.at(-1))) ? prevSlug : splittedSlug.at(-1)
+  let startCount = Number.isNaN(Number(splittedSlug.at(-1))) ? 1 : Number(splittedSlug.at(-1))
+
+  /**
+   * Keep increasing the count until you find a palette which does not exists with the new slug
+   * I know this may not be the best approach, but let's face it, I will update it later
+   */
+  while (true) {
+    const paletteWithSlug = await prisma.palette.count({ where: { slug: `${slugWithoutNumber}-${startCount}` } })
+    if (paletteWithSlug > 0) {
+      startCount += 1
+    } else {
+      break
+    }
+  }
+
+  return `${slugWithoutNumber}-${startCount}`
 }

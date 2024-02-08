@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '../../trp
 import {
   createPalette,
   deletePalette,
+  duplicatePalette,
   findAllPalettes,
   findPaletteById,
   findPaletteBySlug,
@@ -32,4 +33,7 @@ export const palettesRouter = createTRPCRouter({
     .mutation(({ input, ctx }) => updatePalette(input, ctx.db, ctx.session)),
   delete: protectedProcedure.input(z.string()).mutation(({ input, ctx }) => deletePalette(input, ctx.db, ctx.session)),
   public: publicProcedure.query(({ ctx }) => findPublicPalettes(ctx.db)),
+  duplicate: protectedProcedure
+    .input(z.string())
+    .mutation(({ input, ctx }) => duplicatePalette(input, ctx.db, ctx.session)),
 })

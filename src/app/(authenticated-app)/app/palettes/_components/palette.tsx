@@ -1,11 +1,15 @@
+'use client'
+
 import { Palette as PrismaPalette } from '@prisma/client'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { useSession } from 'next-auth/react'
 import ErrorMessage from '~/components/ui/error-message'
 import UsagePopover from '~/components/usage-popover'
 import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { variablesSchema } from '~/schema/palette'
+import PaletteActions from './palette-actions'
 dayjs.extend(relativeTime)
 
 type PaletteProps = {
@@ -16,6 +20,8 @@ type PaletteProps = {
 }
 
 export default function Palette({ className, style, palette, blockNavigation }: PaletteProps) {
+  const { data } = useSession()
+
   const variablesResult = variablesSchema.safeParse(palette.variables)
 
   if (!variablesResult.success) {
@@ -37,12 +43,19 @@ export default function Palette({ className, style, palette, blockNavigation }: 
   }
 
   return (
-    <div className={cn(className)} style={style}>
+    <div className={className} style={style}>
+      {!!data?.user && (
+        <div className="flex items-center justify-end py-1">
+          <PaletteActions id={palette.id} />
+        </div>
+      )}
+
       <Link href={blockNavigation ? '#' : `/app/palettes/${palette.slug}`}>
         <div className="group relative flex h-72 flex-col overflow-hidden rounded-xl border-[0.5px]">
           <div className="absolute bottom-0 left-0 w-full translate-y-full bg-background px-4 py-2 transition-all ease-in-out group-hover:translate-y-0">
             {palette.name}
           </div>
+
           {colorVariables.map((variable) => (
             <div key={variable.id} className="flex-1" style={{ backgroundColor: String(variable.value) }} />
           ))}

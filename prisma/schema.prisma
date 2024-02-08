@@ -80,7 +80,7 @@ model Palette {
     id              String  @id @default(auto()) @map("_id") @db.ObjectId
     name            String
     backgroundColor String?
-    slug            String
+    slug            String  @unique
 
     // There can be two types of variables,
     // 1. Color -> as the name suggest

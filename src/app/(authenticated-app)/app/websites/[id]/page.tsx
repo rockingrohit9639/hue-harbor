@@ -9,7 +9,7 @@ import { match } from 'ts-pattern'
 import { Button, buttonVariants } from '~/components/ui/button'
 import Container from '~/components/ui/container'
 import ErrorMessage from '~/components/ui/error-message'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import Loader from '~/components/ui/loader'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select'
@@ -18,6 +18,7 @@ import UsagePopover from '~/components/usage-popover'
 import { cn, getWebsiteCdnContent } from '~/lib/utils'
 import { UpdateWebsiteInput, updateWebsiteInput } from '~/server/api/routers/websites/websites.input'
 import { api } from '~/trpc/react'
+import OriginsInput from '../_components/origins-input'
 
 export default function WebsiteDetails({ params }: { params: { id: string } }) {
   const form = useForm<UpdateWebsiteInput>({
@@ -31,6 +32,7 @@ export default function WebsiteDetails({ params }: { params: { id: string } }) {
         description: data.description ?? '',
         url: data.url,
         palette: data.paletteId ?? undefined,
+        allowedOrigins: data.allowedOrigins,
       })
     },
   })
@@ -129,6 +131,24 @@ export default function WebsiteDetails({ params }: { params: { id: string } }) {
                       </SelectTrigger>
                     </Select>
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="allowedOrigins"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Allowed Origins</FormLabel>
+                  <FormControl>
+                    <OriginsInput placeholder="Enter origin url" name="allowedOrigins" />
+                  </FormControl>
+
+                  <FormDescription>
+                    Only these origins urls will be allowed to access this website palettes.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

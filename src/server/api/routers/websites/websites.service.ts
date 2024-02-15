@@ -36,7 +36,13 @@ export async function updateWebsite(input: UpdateWebsiteInput, prisma: PrismaCli
 
   return prisma.website.update({
     where: { id: website.id },
-    data: { name: input.name, description: input.description, url: input.url, paletteId: input.palette },
+    data: {
+      name: input.name,
+      description: input.description,
+      url: input.url,
+      paletteId: input.palette,
+      allowedOrigins: input.allowedOrigins,
+    },
   })
 }
 

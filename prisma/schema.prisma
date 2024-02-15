@@ -67,6 +67,8 @@ model Website {
     palette     Palette? @relation(fields: [paletteId], references: [id])
     paletteId   String?  @db.ObjectId
 
+    allowedOrigins String[]
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

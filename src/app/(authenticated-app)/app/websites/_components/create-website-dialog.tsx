@@ -15,10 +15,11 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { CreateWebsiteInput, createWebsiteInput } from '~/server/api/routers/websites/websites.input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form'
 import { Input } from '~/components/ui/input'
 import { Textarea } from '~/components/ui/textarea'
 import { api } from '~/trpc/react'
+import OriginsInput from './origins-input'
 
 type CreateWebsiteDialogProps = {
   className?: string
@@ -95,6 +96,23 @@ export default function CreateWebsiteDialog({ className, style }: CreateWebsiteD
                     <Input placeholder="e.g., www.myportfolio.com" {...field} />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="allowedOrigins"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Allowed Origins</FormLabel>
+                  <FormControl>
+                    <OriginsInput name="allowedOrigins" placeholder="Enter origin" />
+                  </FormControl>
+
+                  <FormDescription>
+                    Only these origins urls will be allowed to access this website palettes.
+                  </FormDescription>
                 </FormItem>
               )}
             />

@@ -10,6 +10,7 @@ export const createWebsiteInput = z.object({
     .string({ invalid_type_error: 'Please enter a valid URL' })
     .min(1, 'Please enter the URL')
     .url({ message: 'Please enter a valid URL' }),
+  allowedOrigins: z.array(z.string().url('Please enter a valid url')).default([]),
 })
 
 export type CreateWebsiteInput = z.infer<typeof createWebsiteInput>

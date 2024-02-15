@@ -9,3 +9,5 @@
 - [ ] Add gradient variable
 - [ ] Add derived variables
 - [ ] Add theme modes in a palette
+- [ ] Add feature to add a palette to favorites
+- [ ] Add integrity in CDN and validate allowed hostnames

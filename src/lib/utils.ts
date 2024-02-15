@@ -23,12 +23,5 @@ export function getWebsiteCdnContent(id: string) {
 <link rel="stylesheet" href="https://hue-harbor.imrohitsaini.in/api/cdn/website/${id}" />
 ~~~
 
-- If you are using a private palette, then use the following CDN
-
-*Note: Don't forget to replace <YOUR-API-KEY> with your own api key generated from "My Api Keys"
-
-~~~html
-<link rel="stylesheet" href="https://hue-harobor.imrohitsaini.in/api/cdn/css/${id}?key=<YOUR-API-KEY>" >
-~~~
 `
 }

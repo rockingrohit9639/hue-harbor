@@ -10,4 +10,4 @@
 - [ ] Add derived variables
 - [ ] Add theme modes in a palette
 - [ ] Add feature to add a palette to favorites
-- [ ] Add integrity in CDN and validate allowed hostnames
+- [x] Add feature to only use cdn in allowed origins

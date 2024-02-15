@@ -27,7 +27,7 @@ export default function UsagePopover({ className, style, slug, triggerProps, cdn
           </TabsList>
 
           <TabsContent value="cdn" className="prose mt-6">
-            <Markdown>{cdnContent}</Markdown>
+            <Markdown className="dark:text-white">{cdnContent}</Markdown>
           </TabsContent>
 
           {!!slug && (

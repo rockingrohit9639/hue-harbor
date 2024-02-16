@@ -232,10 +232,10 @@ export async function addPaletteToFavorite(paletteId: string, prisma: PrismaClie
 }
 
 export async function getOrCreateFavoriteList(prisma: PrismaClient, userId: string) {
-  const listForUser = await prisma.favoriteList.findFirst({ where: { userId } })
+  const listForUser = await prisma.favoriteList.findFirst({ where: { userId }, include: { palettes: true } })
 
   if (!listForUser) {
-    return prisma.favoriteList.create({ data: { user: { connect: { id: userId } } } })
+    return prisma.favoriteList.create({ data: { user: { connect: { id: userId } } }, include: { palettes: true } })
   }
 
   return listForUser

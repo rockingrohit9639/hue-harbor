@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { CompassIcon, GlobeIcon, HomeIcon, Key, LogOutIcon, SwatchBookIcon } from 'lucide-react'
+import { CompassIcon, GlobeIcon, Heart, HomeIcon, Key, LogOutIcon, SwatchBookIcon } from 'lucide-react'
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -44,6 +44,11 @@ export const ROUTES = [
     path: '/public/palettes',
     label: 'Explore Palettes',
     icon: <CompassIcon />,
+  },
+  {
+    path: '/app/favorites',
+    label: 'My Favorites',
+    icon: <Heart />,
   },
 ]
 

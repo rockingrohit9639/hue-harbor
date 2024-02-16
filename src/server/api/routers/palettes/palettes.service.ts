@@ -250,3 +250,7 @@ export async function isPaletteInUserFavorite(paletteId: string, prisma: PrismaC
 
   return false
 }
+
+export async function getTotalFavoritesForPalette(paletteId: string, prisma: PrismaClient) {
+  return prisma.favoriteList.count({ where: { paletteIds: { has: paletteId } } })
+}

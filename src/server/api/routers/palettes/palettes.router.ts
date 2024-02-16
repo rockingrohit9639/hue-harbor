@@ -12,6 +12,7 @@ import {
   getExplorerVariables,
   getOrCreateFavoriteList,
   getPreDeletePaletteStats,
+  getTotalFavoritesForPalette,
   isPaletteInUserFavorite,
   updatePalette,
 } from './palettes.service'
@@ -48,4 +49,7 @@ export const palettesRouter = createTRPCRouter({
     .input(z.string())
     .query(({ input, ctx }) => isPaletteInUserFavorite(input, ctx.db, ctx.session)),
   getFavoriteList: protectedProcedure.query(({ ctx }) => getOrCreateFavoriteList(ctx.db, ctx.session.user.id)),
+  getTotalFavorites: protectedProcedure
+    .input(z.string())
+    .query(({ input, ctx }) => getTotalFavoritesForPalette(input, ctx.db)),
 })

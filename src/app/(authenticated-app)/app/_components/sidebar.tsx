@@ -41,14 +41,14 @@ export const ROUTES = [
     icon: <Key />,
   },
   {
-    path: '/public/palettes',
-    label: 'Explore Palettes',
-    icon: <CompassIcon />,
-  },
-  {
     path: '/app/favorites',
     label: 'My Favorites',
     icon: <Heart />,
+  },
+  {
+    path: '/public/palettes',
+    label: 'Explore Palettes',
+    icon: <CompassIcon />,
   },
 ]
 

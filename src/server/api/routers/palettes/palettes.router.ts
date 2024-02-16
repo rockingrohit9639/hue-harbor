@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../../trpc'
 import {
+  addPaletteToFavorite,
   createPalette,
   deletePalette,
   duplicatePalette,
@@ -10,6 +11,7 @@ import {
   findPublicPalettes,
   getExplorerVariables,
   getPreDeletePaletteStats,
+  isPaletteInUserFavorite,
   updatePalette,
 } from './palettes.service'
 import { createPaletteInput, updatePaletteInput } from './palettes.input'
@@ -38,4 +40,10 @@ export const palettesRouter = createTRPCRouter({
     .input(z.string())
     .mutation(({ input, ctx }) => duplicatePalette(input, ctx.db, ctx.session)),
   explorer: protectedProcedure.query(({ ctx }) => getExplorerVariables(ctx.db, ctx.session)),
+  addToFavorite: protectedProcedure
+    .input(z.string())
+    .mutation(({ input, ctx }) => addPaletteToFavorite(input, ctx.db, ctx.session)),
+  isPaletteInUserFavorite: protectedProcedure
+    .input(z.string())
+    .query(({ input, ctx }) => isPaletteInUserFavorite(input, ctx.db, ctx.session)),
 })

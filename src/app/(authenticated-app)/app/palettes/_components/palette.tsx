@@ -10,6 +10,7 @@ import UsagePopover from '~/components/usage-popover'
 import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { variablesSchema } from '~/schema/palette'
 import PaletteActions from './palette-actions'
+import AddPaletteToFavorite from './add-palette-to-favorite'
 dayjs.extend(relativeTime)
 
 type PaletteProps = {
@@ -21,6 +22,7 @@ type PaletteProps = {
 
 export default function Palette({ className, style, palette, blockNavigation }: PaletteProps) {
   const { data } = useSession()
+  const isAuthenticated = Boolean(data?.user.id)
 
   const variablesResult = variablesSchema.safeParse(palette.variables)
 
@@ -44,7 +46,7 @@ export default function Palette({ className, style, palette, blockNavigation }: 
 
   return (
     <div className={className} style={style}>
-      {!!data?.user && (
+      {isAuthenticated && (
         <div className="flex items-center justify-end py-1">
           <PaletteActions id={palette.id} />
         </div>
@@ -63,7 +65,17 @@ export default function Palette({ className, style, palette, blockNavigation }: 
       </Link>
 
       <div className="mt-2 flex items-center justify-between">
-        <UsagePopover cdnContent={getPaletteCdnContent(palette.slug)} slug={palette.slug} />
+        <div className="flex items-center gap-2">
+          {isAuthenticated && <AddPaletteToFavorite paletteId={palette.id} />}
+
+          <UsagePopover
+            cdnContent={getPaletteCdnContent(palette.slug)}
+            slug={palette.slug}
+            triggerProps={{
+              variant: 'link',
+            }}
+          />
+        </div>
 
         <p className="text-xs text-muted-foreground">{dayjs(palette.createdAt).fromNow()}</p>
       </div>

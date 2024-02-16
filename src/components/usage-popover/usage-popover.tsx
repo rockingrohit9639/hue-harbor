@@ -17,7 +17,7 @@ export default function UsagePopover({ className, style, slug, triggerProps, cdn
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button icon={<Code2Icon />} variant="ghost" className="bg-accent" {...triggerProps} />
+        <Button icon={<Code2Icon />} variant="ghost" {...triggerProps} />
       </PopoverTrigger>
       <PopoverContent className={cn('max-h-[500px] w-[600px] overflow-y-auto', className)} style={style}>
         <Tabs defaultValue="cdn" className="w-full">

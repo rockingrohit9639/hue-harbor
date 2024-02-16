@@ -35,9 +35,9 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    id            String        @id @default(auto()) @map("_id") @db.ObjectId
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
@@ -45,6 +45,7 @@ model User {
     websites      Website[]
     palettes      Palette[]
     apiKeys       ApiKey[]
+    favoriteList  FavoriteList?
 }
 
 model VerificationToken {
@@ -100,6 +101,9 @@ model Palette {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
+    favoriteList    FavoriteList[] @relation(fields: [favoriteListIds], references: [id])
+    favoriteListIds String[]       @db.ObjectId
+
     @@index([name, slug])
 }
 
@@ -114,4 +118,14 @@ model ApiKey {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model FavoriteList {
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String @unique @db.ObjectId
+
+    palettes   Palette[] @relation(fields: [paletteIds], references: [id])
+    paletteIds String[]  @db.ObjectId
 }

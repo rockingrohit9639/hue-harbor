@@ -211,3 +211,42 @@ export async function getExplorerVariables(prisma: PrismaClient, session: Sessio
     community: communityVariables.filter((variable) => variable.type === 'color'),
   }
 }
+
+export async function addPaletteToFavorite(paletteId: string, prisma: PrismaClient, session: Session) {
+  const favoriteList = await getOrCreateFavoriteList(prisma, session.user.id)
+  const isPaletteInFavorite = await isPaletteInUserFavorite(paletteId, prisma, session)
+
+  if (isPaletteInFavorite) {
+    return prisma.favoriteList.update({
+      where: { id: favoriteList.id },
+      data: { palettes: { disconnect: { id: paletteId } } },
+    })
+  }
+
+  return prisma.favoriteList.update({
+    where: { id: favoriteList.id },
+    data: {
+      palettes: { connect: { id: paletteId } },
+    },
+  })
+}
+
+export async function getOrCreateFavoriteList(prisma: PrismaClient, userId: string) {
+  const listForUser = await prisma.favoriteList.findFirst({ where: { userId } })
+
+  if (!listForUser) {
+    return prisma.favoriteList.create({ data: { user: { connect: { id: userId } } } })
+  }
+
+  return listForUser
+}
+
+export async function isPaletteInUserFavorite(paletteId: string, prisma: PrismaClient, session: Session) {
+  const favoriteList = await getOrCreateFavoriteList(prisma, session.user.id)
+
+  if (favoriteList.paletteIds.includes(paletteId)) {
+    return true
+  }
+
+  return false
+}

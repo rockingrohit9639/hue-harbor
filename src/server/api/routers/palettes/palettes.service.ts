@@ -1,6 +1,7 @@
 import { PaletteVisibility, PrismaClient } from '@prisma/client'
 import { Session } from 'next-auth'
 import { TRPCError } from '@trpc/server'
+import { nanoid } from 'nanoid'
 import { CreatePaletteInput, UpdatePaletteInput } from './palettes.input'
 import { GetVariableByType, variablesSchema } from '~/schema/palette'
 
@@ -21,6 +22,13 @@ export async function createPalette(input: CreatePaletteInput, prisma: PrismaCli
       variables: [],
       backgroundColor: input.backgroundColor,
       slug: input.slug,
+      themes: [
+        {
+          id: nanoid(),
+          name: 'Default',
+          identifier: ':root',
+        },
+      ],
     },
   })
 }
@@ -66,6 +74,7 @@ export async function updatePalette(input: UpdatePaletteInput, prisma: PrismaCli
       visibility: input.visibility,
       variables: input.variables,
       backgroundColor: input.backgroundColor,
+      themes: input.themes,
     },
   })
 }

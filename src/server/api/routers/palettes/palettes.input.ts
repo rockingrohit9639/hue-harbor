@@ -1,7 +1,7 @@
 import { PaletteVisibility } from '@prisma/client'
 import { z } from 'zod'
 import { SLUG_REGEX } from '~/lib/constants'
-import { variableSchema } from '~/schema/palette'
+import { themesSchema, variableSchema } from '~/schema/palette'
 
 export const createPaletteInput = z.object({
   name: z
@@ -21,15 +21,24 @@ export const updatePaletteInput = createPaletteInput
   .extend({
     id: z.string(),
     variables: z.array(variableSchema),
+    themes: themesSchema,
   })
-  .superRefine(({ variables }, ctx) => {
+  .superRefine(({ variables, themes }, ctx) => {
     const uniqVariableIdentifies = new Set([...variables.map((v) => v.identifier)])
-
     if (uniqVariableIdentifies.size !== variables.length) {
       ctx.addIssue({
         code: 'custom',
         message: 'All variable identifiers must be unique in a palette!',
         path: ['variables'],
+      })
+    }
+
+    const uniqThemeIdentifiers = new Set([...themes.map((t) => t.identifier)])
+    if (uniqThemeIdentifiers.size !== themes.length) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'All theme identifiers must be unique in a palette!',
+        path: ['themes'],
       })
     }
   })

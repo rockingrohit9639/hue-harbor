@@ -21,3 +21,12 @@ export const variablesSchema = z.array(variableSchema)
 export type Variable = z.infer<typeof variableSchema>
 export type VariableType = Variable['type']
 export type GetVariableByType<T extends VariableType> = Extract<Variable, { type: T }>
+
+export const themeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  identifier: z.string().optional().default(':root'),
+})
+export const themesSchema = z.array(themeSchema)
+export type Themes = z.infer<typeof themesSchema>
+export type Theme = z.infer<typeof themeSchema>

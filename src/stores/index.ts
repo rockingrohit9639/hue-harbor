@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Variable } from '~/schema/palette'
+import { Theme, Themes, Variable } from '~/schema/palette'
 
 type Visibility = 'PRIVATE' | 'PUBLIC'
 
@@ -25,6 +25,11 @@ type PaletteStore = {
   setActiveVariable: (variable: Variable | undefined) => void
   updateVariable: (id: string, properties: Variable) => void
   removeVariable: (id: string) => void
+
+  /** Themes */
+  themes: Themes
+  updateThemes: (themes: Themes) => void
+  addTheme: (theme: Theme) => void
 }
 
 export const usePaletteStore = create<PaletteStore>((set) => ({
@@ -104,5 +109,14 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
       ...prev,
       variables: prev.variables.filter((variable) => variable.id !== id),
     }))
+  },
+
+  /** Themes */
+  themes: [],
+  updateThemes: (themes) => {
+    set((prev) => ({ ...prev, themes }))
+  },
+  addTheme: (theme) => {
+    set((prev) => ({ ...prev, themes: [...prev.themes, theme] }))
   },
 }))

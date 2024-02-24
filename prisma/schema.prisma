@@ -94,6 +94,8 @@ model Palette {
     // PRIVATE -> A palette is private to a user and he/she can use it in their own websites only
     visibility PaletteVisibility @default(PRIVATE)
 
+    themes Json[] @default([])
+
     createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
     createdById String    @db.ObjectId
     websites    Website[]

@@ -17,7 +17,7 @@ import { Button } from '~/components/ui/button'
 import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { usePaletteStore } from '~/stores'
 import ColorPicker from '~/components/color-picker'
-import { variableSchema } from '~/schema/palette'
+import { themesSchema, variableSchema } from '~/schema/palette'
 import AddVariableDialog from '../_components/add-variable-dialog'
 import Builder from '../_components/builder'
 import VariableProperties from '../_components/variable-properties'
@@ -25,6 +25,7 @@ import useUnsavedChanges from '~/hooks/use-unsaved-changes'
 import UsagePopover from '~/components/usage-popover'
 import PaletteBuilderCommands from '../_components/palette-builder-commands'
 import VariablesExplorer from '../_components/variables-explorer'
+import ThemeTabs from '../_components/theme-tabs'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -40,6 +41,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const variables = usePaletteStore((store) => store.variables)
   const setIsUpdateAllowed = usePaletteStore((store) => store.setIsUpdateAllowed)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
+  const updateThemes = usePaletteStore((store) => store.updateThemes)
 
   const previousVariables = usePrevious(variables)
   useUnsavedChanges(JSON.stringify(variables) !== JSON.stringify(previousVariables))
@@ -55,6 +57,11 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
       const result = z.array(variableSchema).safeParse(data.variables)
       if (result.success) {
         updateVariables(result.data)
+      }
+
+      const themesResult = themesSchema.safeParse(data.themes)
+      if (themesResult.success) {
+        updateThemes(themesResult.data)
       }
     },
   })
@@ -93,7 +100,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
             }}
           />
 
-          <div className="relative z-10 flex justify-between border-b !bg-background p-4">
+          <div className="relative z-10 flex justify-between border-b bg-background p-4">
             <div>
               <EditableInput
                 editable={isUpdateAllowed}
@@ -153,7 +160,7 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
               )}
             </div>
           </div>
-
+          <ThemeTabs />
           <Builder />
         </div>
         <div className="flex flex-col border-l">

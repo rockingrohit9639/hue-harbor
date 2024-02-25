@@ -16,8 +16,11 @@ export default function Builder({ className, style }: BuilderProps) {
   const activeVariable = usePaletteStore((store) => store.activeVariable)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
   const removeVariable = usePaletteStore((store) => store.removeVariable)
+  const activeTheme = usePaletteStore((store) => store.activeTheme)
 
-  if (!variables.length) {
+  const activeThemeVariables = variables.filter((variable) => variable.theme === activeTheme?.id)
+
+  if (!activeThemeVariables.length) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center gap-2">
         <PackageOpen />
@@ -32,7 +35,7 @@ export default function Builder({ className, style }: BuilderProps) {
 
   return (
     <div className={cn('flex flex-col gap-y-2 p-4', className, { 'opacity-50': !isUpdateAllowed })} style={style}>
-      {variables.map((variable) => (
+      {activeThemeVariables.map((variable) => (
         <div
           key={variable.id}
           className={cn('flex w-full cursor-pointer rounded-md border-2 border-border bg-card', {

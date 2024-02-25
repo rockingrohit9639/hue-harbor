@@ -8,6 +8,9 @@ type ThemeTabsProps = {
 }
 
 export default function ThemeTabs({ className, style }: ThemeTabsProps) {
+  const activeTheme = usePaletteStore((store) => store.activeTheme)
+  const setActiveTheme = usePaletteStore((store) => store.setActiveTheme)
+
   const themes = usePaletteStore((store) => store.themes)
 
   return (
@@ -16,7 +19,13 @@ export default function ThemeTabs({ className, style }: ThemeTabsProps) {
         {themes.map((theme) => (
           <div
             key={theme.id}
-            className="cursor-pointer rounded-tl-md rounded-tr-md border border-b-0 px-4 py-2 transition-colors duration-100 hover:bg-accent"
+            className={cn(
+              'cursor-pointer rounded-tl-md rounded-tr-md border border-b-0 px-4 py-2 transition-colors duration-100 hover:bg-accent',
+              { 'bg-accent': activeTheme?.id === theme.id },
+            )}
+            onClick={() => {
+              setActiveTheme(theme)
+            }}
           >
             {theme.name}
           </div>

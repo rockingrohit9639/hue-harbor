@@ -19,6 +19,7 @@ type AddThemeDialogProps = {
 export default function AddThemeDialog({ className, style }: AddThemeDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const addTheme = usePaletteStore((store) => store.addTheme)
+  const isUpdateAllowed = usePaletteStore((store) => store.isUpdateAllowed)
 
   const form = useForm<Theme>({
     resolver: zodResolver(themeSchema.omit({ id: true })),
@@ -38,7 +39,10 @@ export default function AddThemeDialog({ className, style }: AddThemeDialogProps
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <div className="h-full cursor-pointer rounded-tl-md rounded-tr-md border border-b-0 border-l-0 px-3 py-3 transition-colors duration-100 hover:bg-accent">
+        <div
+          hidden={!isUpdateAllowed}
+          className="h-full cursor-pointer rounded-tl-md rounded-tr-md border border-b-0 border-l-0 px-3 py-3 transition-colors duration-100 hover:bg-accent"
+        >
           <PlusIcon className="h-4 w-4" />
         </div>
       </DialogTrigger>

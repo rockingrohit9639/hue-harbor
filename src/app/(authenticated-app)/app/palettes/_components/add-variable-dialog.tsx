@@ -29,8 +29,11 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
   const setOpen = usePaletteStore((store) => store.setAddVariableOpen)
   const addVariable = usePaletteStore((store) => store.addVariable)
   const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
+  const activeTheme = usePaletteStore((store) => store.activeTheme)
 
   function handleAddNewVariable(type: VariableType) {
+    if (!activeTheme) return
+
     const id = nanoid()
 
     /** Using ts-pattern here will be helpful in case if we add more variable types */
@@ -41,6 +44,7 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
         identifier: '--my-color-variable',
         type: 'color' as const,
         value: '#000000',
+        theme: activeTheme.id,
       }))
       .with('number', () => ({
         id,
@@ -48,6 +52,7 @@ export default function AddVariableDialog({ className, style, triggerProps }: Ad
         identifier: '--my-number-variable',
         type: 'number' as const,
         value: 0,
+        theme: activeTheme.id,
       }))
       .exhaustive()
 

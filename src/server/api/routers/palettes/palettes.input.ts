@@ -23,16 +23,7 @@ export const updatePaletteInput = createPaletteInput
     variables: z.array(variableSchema),
     themes: themesSchema,
   })
-  .superRefine(({ variables, themes }, ctx) => {
-    const uniqVariableIdentifies = new Set([...variables.map((v) => v.identifier)])
-    if (uniqVariableIdentifies.size !== variables.length) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'All variable identifiers must be unique in a palette!',
-        path: ['variables'],
-      })
-    }
-
+  .superRefine(({ themes }, ctx) => {
     const uniqThemeIdentifiers = new Set([...themes.map((t) => t.identifier)])
     if (uniqThemeIdentifiers.size !== themes.length) {
       ctx.addIssue({

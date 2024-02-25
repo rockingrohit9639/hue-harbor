@@ -31,6 +31,7 @@ type PaletteStore = {
   updateThemes: (themes: Themes) => void
   addTheme: (theme: Theme) => void
   updateTheme: (id: string, updatedTheme: Theme) => void
+  deleteTheme: (id: string) => void
 
   activeTheme?: Theme
   setActiveTheme: (theme: Theme | undefined) => void
@@ -141,6 +142,13 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
 
         return theme
       }),
+    }))
+  },
+  deleteTheme: (id) => {
+    set((prev) => ({
+      ...prev,
+      variables: prev.variables.filter((v) => v.theme !== id),
+      themes: prev.themes.filter((t) => t.id !== id),
     }))
   },
 }))

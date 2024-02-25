@@ -1,5 +1,5 @@
 import { Hash, Pipette } from 'lucide-react'
-import { Variable, VariableType } from '~/schema/palette'
+import { Themes, Variable, VariableType } from '~/schema/palette'
 import { Property } from '~/types/property'
 
 export const VARIABLES = [
@@ -23,21 +23,28 @@ export const VARIABLES = [
   icon: React.ReactElement<{ className?: string }>
 }>
 
-export function generateCSS(variables: Variable[]) {
-  let css = ':root {\n'
+export function generateCSS(variables: Variable[], themes: Themes) {
+  let css = ''
 
-  for (const variable of variables) {
-    switch (variable.type) {
-      case 'number':
-        css += `\t${variable.identifier} : ${variable.value}${variable.unit};\n`
-        break
+  for (const theme of themes) {
+    let themeCss = `${theme.identifier} {`
 
-      default:
-        css += `\t${variable.identifier} : ${variable.value};\n`
+    const themeVariables = variables.filter((variable) => variable.theme === theme.id)
+    for (const variable of themeVariables) {
+      switch (variable.type) {
+        case 'number':
+          themeCss += `\n\t${variable.identifier} : ${variable.value}${variable.unit};`
+          break
+
+        default:
+          themeCss += `\n\t${variable.identifier} : ${variable.value};`
+      }
     }
-  }
 
-  css += '}\n'
+    themeCss += '\n}\n\n'
+
+    css += themeCss
+  }
 
   return css
 }

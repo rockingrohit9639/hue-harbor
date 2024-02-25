@@ -2,7 +2,7 @@ import { PaletteVisibility } from '@prisma/client'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { generateCSS } from '~/lib/palette'
-import { variableSchema } from '~/schema/palette'
+import { themesSchema, variableSchema } from '~/schema/palette'
 import { db } from '~/server/db'
 
 export async function GET(_: Request, { params }: { params: { slug: string } }) {
@@ -21,7 +21,12 @@ export async function GET(_: Request, { params }: { params: { slug: string } }) 
     return new NextResponse('Palette is not configures properly!', { status: 500 })
   }
 
-  const css = generateCSS(result.data)
+  const themeResult = themesSchema.safeParse(palette.themes)
+  if (!themeResult.success) {
+    return new NextResponse('Theme is not configured properly!')
+  }
+
+  const css = generateCSS(result.data, themeResult.data)
 
   return new NextResponse(css, {
     headers: {

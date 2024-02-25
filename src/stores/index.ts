@@ -7,9 +7,9 @@ type PaletteStore = {
   isUpdateAllowed: boolean
   setIsUpdateAllowed: (isUpdateAllowed: boolean) => void
 
-  basicData?: { name?: string; visibility?: Visibility; backgroundColor?: string }
+  basicData?: { id?: string; name?: string; visibility?: Visibility; backgroundColor?: string }
   variables: Variable[]
-  updateBasicData: (palette: { name?: string; visibility?: Visibility; backgroundColor?: string }) => void
+  updateBasicData: (palette: { id?: string; name?: string; visibility?: Visibility; backgroundColor?: string }) => void
 
   isAddVariableOpen: boolean
   setAddVariableOpen: (isOpen: boolean) => void
@@ -30,6 +30,9 @@ type PaletteStore = {
   themes: Themes
   updateThemes: (themes: Themes) => void
   addTheme: (theme: Theme) => void
+
+  activeTheme?: Theme
+  setActiveTheme: (theme: Theme | undefined) => void
 }
 
 export const usePaletteStore = create<PaletteStore>((set) => ({
@@ -118,5 +121,10 @@ export const usePaletteStore = create<PaletteStore>((set) => ({
   },
   addTheme: (theme) => {
     set((prev) => ({ ...prev, themes: [...prev.themes, theme] }))
+  },
+
+  activeTheme: undefined,
+  setActiveTheme: (theme) => {
+    set((prev) => ({ ...prev, activeTheme: theme }))
   },
 }))

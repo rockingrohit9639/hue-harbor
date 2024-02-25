@@ -2,13 +2,10 @@
 
 import { match } from 'ts-pattern'
 import { useSession } from 'next-auth/react'
-import { toast } from 'sonner'
 import { Edit2, Save } from 'lucide-react'
-import { z } from 'zod'
 import { usePrevious } from '@uidotdev/usehooks'
 import ErrorMessage from '~/components/ui/error-message'
 import Loader from '~/components/ui/loader'
-import { api } from '~/trpc/react'
 import DeletePaletteDialog from '../_components/delete-palette-dialog'
 import { Switch } from '~/components/ui/switch'
 import { Label } from '~/components/ui/label'
@@ -17,7 +14,6 @@ import { Button } from '~/components/ui/button'
 import { cn, getPaletteCdnContent } from '~/lib/utils'
 import { usePaletteStore } from '~/stores'
 import ColorPicker from '~/components/color-picker'
-import { themesSchema, variableSchema } from '~/schema/palette'
 import AddVariableDialog from '../_components/add-variable-dialog'
 import Builder from '../_components/builder'
 import VariableProperties from '../_components/variable-properties'
@@ -26,6 +22,7 @@ import UsagePopover from '~/components/usage-popover'
 import PaletteBuilderCommands from '../_components/palette-builder-commands'
 import VariablesExplorer from '../_components/variables-explorer'
 import ThemeTabs from '../_components/theme-tabs'
+import usePalette from '~/hooks/use-palette'
 
 type PaletteBuilderProps = {
   params: { slug: string }
@@ -33,50 +30,16 @@ type PaletteBuilderProps = {
 
 export default function PaletteBuilder({ params }: PaletteBuilderProps) {
   const { data: session } = useSession()
-
   const paletteData = usePaletteStore((store) => store.basicData)
   const setPaletteData = usePaletteStore((store) => store.updateBasicData)
-  const updateVariables = usePaletteStore((store) => store.updateVariables)
   const isUpdateAllowed = usePaletteStore((store) => store.isUpdateAllowed)
   const variables = usePaletteStore((store) => store.variables)
   const setIsUpdateAllowed = usePaletteStore((store) => store.setIsUpdateAllowed)
-  const setActiveVariable = usePaletteStore((store) => store.setActiveVariable)
-  const updateThemes = usePaletteStore((store) => store.updateThemes)
 
   const previousVariables = usePrevious(variables)
   useUnsavedChanges(JSON.stringify(variables) !== JSON.stringify(previousVariables))
 
-  const paletteQuery = api.palettes.findOneBySlug.useQuery(params.slug, {
-    onSuccess: (data) => {
-      setPaletteData({
-        name: data.name,
-        visibility: data.visibility,
-        backgroundColor: data.backgroundColor ?? '',
-      })
-
-      const result = z.array(variableSchema).safeParse(data.variables)
-      if (result.success) {
-        updateVariables(result.data)
-      }
-
-      const themesResult = themesSchema.safeParse(data.themes)
-      if (themesResult.success) {
-        updateThemes(themesResult.data)
-      }
-    },
-  })
-
-  const updatePaletteMutation = api.palettes.update.useMutation({
-    onSuccess: () => {
-      paletteQuery.refetch()
-      setActiveVariable(undefined)
-      setIsUpdateAllowed(false)
-      toast.success('Palette updated successfully!')
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const { isLoading, paletteQuery, handleUpdatePaletteMutation } = usePalette(params.slug)
 
   return match(paletteQuery)
     .with({ status: 'loading' }, () => (
@@ -138,18 +101,12 @@ export default function PaletteBuilder({ params }: PaletteBuilderProps) {
               )}
 
               {isUpdateAllowed ? (
-                <Button
-                  loading={updatePaletteMutation.isLoading}
-                  icon={<Save className="h-4 w-4" />}
-                  onClick={() => {
-                    updatePaletteMutation.mutate({ id: data.id, ...paletteData, variables })
-                  }}
-                >
+                <Button loading={isLoading} icon={<Save className="h-4 w-4" />} onClick={handleUpdatePaletteMutation}>
                   Save Changes
                 </Button>
               ) : (
                 <Button
-                  loading={updatePaletteMutation.isLoading}
+                  loading={isLoading}
                   icon={<Edit2 className="h-4 w-4" />}
                   onClick={() => {
                     setIsUpdateAllowed(true)

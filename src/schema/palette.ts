@@ -31,3 +31,6 @@ export const themeSchema = z.object({
 export const themesSchema = z.array(themeSchema)
 export type Themes = z.infer<typeof themesSchema>
 export type Theme = z.infer<typeof themeSchema>
+
+export const updateThemeSchema = themeSchema
+export type UpdateThemeSchema = z.infer<typeof updateThemeSchema>

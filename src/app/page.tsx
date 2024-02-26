@@ -1,147 +1,102 @@
-import { CogIcon, GithubIcon, PaintBucket, WaypointsIcon } from 'lucide-react'
-import Image from 'next/image'
+import { GithubIcon } from 'lucide-react'
 import Link from 'next/link'
 import { cloneElement } from 'react'
-import colors from 'tailwindcss/colors'
 import Navbar from '~/components/navbar'
-import { getServerAuthSession } from '~/server/auth'
-
-const BOX_COLORS = [
-  colors.red['500'],
-  colors.amber['500'],
-  colors.green['500'],
-  colors.blue['500'],
-  colors.violet['500'],
-  colors.emerald['500'],
-  colors.purple['500'],
-  colors.teal['500'],
-  colors.rose['500'],
-]
-
-const FEATURES = [
-  {
-    title: 'Create Custom Color Palettes',
-    content: 'Easily create personalized color palettes using our intuitive interface and advanced color tools.',
-    icon: <PaintBucket />,
-  },
-  {
-    title: 'Manage Your Palettes',
-    content: 'Organize, edit, and customize your color palettes with ease, ensuring consistency across your projects.',
-    icon: <CogIcon />,
-  },
-  {
-    title: 'Seamless Integration',
-    content: 'Integrate your palettes into your projects effortlessly using our CDN or API options.',
-    icon: <WaypointsIcon />,
-  },
-]
-
-const STEPS = [
-  {
-    title: 'Sign Up for Free',
-    content:
-      'Create your Hue Harbor account in minutes and gain instant access to our powerful palette management tools.',
-  },
-  {
-    title: 'Create Your Palette',
-    content:
-      'Use our color picker and customization options to create your custom color palette or import existing palettes.',
-  },
-  {
-    title: 'Integrate with Your Projects',
-    content:
-      'Easily integrate your palettes into your websites, apps, or designs using our provided CDN or plugin options.',
-  },
-]
+import { HOMEPAGE_PALETTE_SLUG } from '~/lib/constants'
+import { variablesSchema } from '~/schema/palette'
+import { db } from '~/server/db'
+import Background from './_components/background'
+import Container from '~/components/ui/container'
+import { cn } from '~/lib/utils'
+import { buttonVariants } from '~/components/ui/button'
+import { FAQS, FEATURES, STEPS } from '~/lib/home'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '~/components/ui/accordion'
 
 export default async function LandingPage() {
-  const session = await getServerAuthSession()
+  const palette = await db.palette.findFirstOrThrow({ where: { slug: HOMEPAGE_PALETTE_SLUG } })
+  const variables = variablesSchema.parse(palette.variables)
 
   return (
     <div className="bg-white">
       <Navbar />
-      <section className="py-12md:py-24 h-screen w-full bg-gray-100 text-black lg:py-32">
-        <div className="flex h-full w-full items-center justify-center">
-          <div className="container grid h-full w-full md:grid-cols-2">
-            <div className="flex flex-col justify-center gap-4 md:max-w-[90%]">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-6xl">Welcome to Hue Harbor</h1>
-              <p className="text-lg tracking-tight text-muted-foreground">
-                Unleash your creativity with Hue Harbor. Effortlessly manage and integrate stunning color palettes into
-                your projects. Get started today and elevate your designs.
-              </p>
-              <Link
-                href={session?.user ? '/app' : '/auth/login'}
-                className="w-max rounded-md bg-black px-4 py-2 text-white"
-              >
-                Create Your Palette
-              </Link>
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="grid grid-cols-3 gap-4">
-                {BOX_COLORS.map((color) => (
-                  <div key={color} className="h-20 w-20 rounded" style={{ backgroundColor: color }} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+      <section className="relative min-h-screen">
+        <Background variables={variables} />
+
+        <Container className="relative flex h-screen flex-col justify-center">
+          <h1 className="text-8xl font-bold text-white md:text-[140px]">Hue Harbor</h1>
+          <p className="text-2xl font-medium text-muted-foreground">Elevate Your Projects with Vibrant Colors</p>
+        </Container>
       </section>
 
       {/* About Us */}
-      <section className="border-b border-b-gray-100">
-        <div className="container grid text-black md:grid-cols-2">
-          <div className="hidden h-full md:block">
-            <Image
-              src="/about.jpg"
-              alt="about"
-              width={1000}
-              height={1000}
-              className="h-full max-h-[500px] w-full object-cover"
-            />
-          </div>
-          <div className="flex flex-col items-end justify-center gap-4 p-8">
-            <h1 className="text-right text-4xl font-bold tracking-tighter">Hue Harbor</h1>
-            <p className="text-right text-lg tracking-tight text-muted-foreground">
-              At Hue Harbor, we are passionate about simplifying color palette management for designers, developers, and
-              creatives. Our platform provides intuitive tools to create, customize, and integrate stunning color
-              palettes seamlessly. Join our community and bring your projects to life with vibrant colors and effortless
-              creativity.
-            </p>
-            <Link href="/public/palettes" className="w-max rounded-md bg-black px-4 py-2 text-white">
-              Explore Palettes
-            </Link>
-          </div>
+      <section className="bg-[url(/about-bg.jpg)] bg-cover py-40">
+        <div className="flex flex-col items-center justify-center gap-4 p-8 text-center">
+          <h1 className="text-4xl font-bold tracking-tighter text-black">Unleashing Creativity with Hue Harbor</h1>
+          <p className="text-lg tracking-tight text-gray-500 md:w-[60%]">
+            At Hue Harbor, we are passionate about simplifying color palette management for designers, developers, and
+            creatives. Our platform provides intuitive tools to create, customize, and integrate stunning color palettes
+            seamlessly. Join our community and bring your projects to life with vibrant colors and effortless
+            creativity.
+          </p>
+
+          <Link href="/public/palettes" className="mt-4 w-max rounded-full bg-black px-4 py-2 text-white">
+            Explore Palettes
+          </Link>
         </div>
       </section>
 
       {/* Features  */}
-      <section className="container grid gap-4 py-20 md:grid-cols-3">
-        {FEATURES.map((feature, i) => (
-          <div
-            key={i}
-            className="flex flex-col items-center justify-center gap-4 rounded-md border border-gray-100 p-4 text-black shadow"
-          >
-            <div className="flex items-center justify-center rounded-md bg-primary p-4">
-              {cloneElement(feature.icon, { className: 'text-white' })}
+      <section className="bg-gray-50 py-40">
+        <Container className="grid gap-4 md:grid-cols-3">
+          {FEATURES.map((feature, i) => (
+            <div
+              key={i}
+              className="flex h-96 flex-col items-center justify-center gap-4 rounded-2xl border-2 border-gray-100 bg-white px-4 py-8 text-black shadow-sm"
+            >
+              {cloneElement(feature.icon, { className: 'text-primary w-10 h-10' })}
+              <h1 className="text-xl font-bold">{feature.title}</h1>
+              <p className="text-center text-sm text-muted-foreground md:w-[80%]">{feature.content}</p>
             </div>
-            <h1 className="text-lg font-bold">{feature.title}</h1>
-            <p className="text-center text-sm text-muted-foreground">{feature.content}</p>
-          </div>
-        ))}
+          ))}
+        </Container>
       </section>
 
-      <section className="mx-auto flex max-w-screen-sm flex-col items-center justify-center gap-4 px-10 py-20">
-        {STEPS.map((step, i) => (
-          <>
-            <div className="rounded-md border px-4 py-2 text-black">
-              <h1 className="mb-2 text-2xl font-bold">
-                {i + 1}. {step.title}
-              </h1>
-              <p>{step.content}</p>
-            </div>
-            {i < STEPS.length - 1 ? <div className="h-10 w-[1px] bg-gray-300" /> : null}
-          </>
-        ))}
+      <section className="bg-gray-50 py-40">
+        <h1 className="mb-8 text-center text-5xl font-bold text-black">How to use Hue Harbor?</h1>
+        <Container className="flex w-full flex-col items-center justify-center gap-4">
+          {STEPS.map((step, i) => (
+            <>
+              <div className="w-full rounded-md border border-gray-200 bg-white px-4 py-2 text-black">
+                <h1 className="mb-2 text-2xl font-bold">
+                  {i + 1}. {step.title}
+                </h1>
+                <p className="text-gray-500">{step.content}</p>
+              </div>
+              {i < STEPS.length - 1 ? <div className="h-10 w-[1px] bg-gray-300" /> : null}
+            </>
+          ))}
+        </Container>
+      </section>
+
+      <section className="mx-auto max-w-screen-lg py-40">
+        <h1 className="mb-8 text-center text-4xl font-bold text-black md:text-6xl">FAQs</h1>
+        <Accordion type="single" collapsible>
+          {FAQS.map((faq, i) => (
+            <AccordionItem value={faq.question} key={i}>
+              <AccordionTrigger className="text-black hover:no-underline">{faq.question}</AccordionTrigger>
+              <AccordionContent className="text-gray-500">{faq.answer}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
+
+      <section className="py-40 text-center">
+        <h1 className="mb-8 text-4xl font-bold text-black md:text-6xl">Sign up today.</h1>
+        <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
+          <Link href="/auth/login" className={cn(buttonVariants(), 'rounded-full bg-black')}>
+            Get Started
+          </Link>
+        </div>
       </section>
 
       <footer className="border-t border-t-gray-100 text-black">

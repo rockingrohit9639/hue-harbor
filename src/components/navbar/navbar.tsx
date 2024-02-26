@@ -17,10 +17,7 @@ export default function Navbar({ className, style, showThemeToggler }: NavbarPro
 
   return (
     <nav
-      className={cn(
-        'fixed left-0 top-0 h-16 w-full border-b border-b-gray-100 bg-white/50 text-black backdrop-blur-md',
-        className,
-      )}
+      className={cn('fixed left-0 top-0 z-10 h-16 w-full bg-white/90 text-black backdrop-blur-md', className)}
       style={style}
     >
       <div className="container flex h-full items-center justify-between">
